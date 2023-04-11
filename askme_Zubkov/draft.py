@@ -10,4 +10,4 @@ func()
 # ctrl + H
 # ctrl + ~
 # alt + shift + F - formating
-# ls -lah
+# ls -lah.
