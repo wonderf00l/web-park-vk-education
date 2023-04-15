@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# from .views import * # need dot for the current dir
 from askme.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', ),
-    path('askme/', include('askme.urls')),
+    # path('', init_handler, name='init'), don;t need separate views.py in main settings
+    path('', include('askme.urls'))
 ]

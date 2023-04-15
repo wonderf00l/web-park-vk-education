@@ -1,0 +1,9 @@
+.profile_icon {
+    width: 50%;
+    border-radius: 50%;
+}
+
+.nick {
+    padding: 0px 16px;
+    color: white;
+}

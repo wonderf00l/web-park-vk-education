@@ -1,0 +1,78 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'askme/img/title.png' %}">
+
+    <title>{{ title }}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'askme/css/bootstrap.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'askme/css/additonal.css' %}" rel="stylesheet">
+
+    <link href="{% static 'askme/css/my.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <header>
+      <!-- Fixed navbar -->
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-2">
+                        <a class="navbar-brand" href="#">AskMe</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                    <div class="col-3">
+                        <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                    </div>
+                    <div class="col-2">
+                        <form class="form-inline">
+                            <button class="btn btn-outline-success" type="submit">Ask</button>
+                          </form>
+                    </div>
+                    <div class="col-5">
+                        {% block userblock %}
+                            {% if is_authorized == True %}
+                                {% include "askme/authorized.html" %}
+                            {% else %}
+                                {% include "askme/unauthorized.html" %}
+                            {% endif %}
+                        {% endblock userblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Begin page content -->
+    <main role="main" class="container">
+        {% block content %}
+        {% endblock content %}
+    </main>
+    
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted">All rights reserved</span>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="{% static 'askme/js/bootstrap.js' %}"></script>
+  </body>
+</html>

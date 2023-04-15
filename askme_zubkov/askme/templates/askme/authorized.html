@@ -1,0 +1,25 @@
+{% extends 'askme/base.html' %}
+{% load static %}
+
+{% block userblock %}
+    <div class="row">
+        <div class="col-4">
+            <img class="profile_icon" src="{% static profile_icon_url %}">
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <div class="nick">
+                    {{ user_nickname }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-primary" href="#" role="button">settings</a>
+                </div>
+                <div class="col">
+                    <a class="btn btn-primary" href="#" role="button">log out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock userblock %}

@@ -11,9 +11,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
+BASE_DIR = Path(__file__).resolve().parent.parent # for / overloading
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'askme' # добавляем приложения
 ]
 
 MIDDLEWARE = [
@@ -54,7 +58,10 @@ ROOT_URLCONF = 'askme_zubkov.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+                    # os.path.join(BASE_DIR, 'templates'), # поиск общей папки шаблонов проекта
+                    # os.path.join(BASE_DIR, 'askme', 'templates', 'askme') # поиск шаблонов кокнретного приложения
+                ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,6 +73,7 @@ TEMPLATES = [
         },
     },
 ]
+# search in templates folder by default
 
 WSGI_APPLICATION = 'askme_zubkov.wsgi.application'
 
@@ -115,7 +123,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'static/' # префикс URL - адреса для статических файлов
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') # путь к общей статической папке, используемой веб-сервером
+
+STATICFILES_DIRS = [] # список доп(нестандратных) путей к стаическим файлам, используемых для сбора и режима отладки
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
