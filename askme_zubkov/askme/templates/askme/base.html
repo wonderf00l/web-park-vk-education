@@ -20,7 +20,7 @@
 
   <body>
 
-    <header>
+    <header class="head">
       <!-- Fixed navbar -->
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -57,13 +57,26 @@
 
     <!-- Begin page content -->
     <main role="main" class="container">
+        {% comment %} {% block content %}
+        {% endblock content %} {% endcomment %}
+        {% comment %} <br>
+        <h1>Page title.</h1>
+        <br> {% endcomment %}
+        {% comment %} <div class="row"> {% endcomment %}
+            
+                
         {% block content %}
         {% endblock content %}
+
+                {% comment %} {% block sidebar %}
+
+                {% endblock sidebar %} {% endcomment %}
+            
     </main>
     
     <footer class="footer">
       <div class="container">
-        <span class="text-muted">All rights reserved</span>
+        <span class="text-muted">Footer content</span>
       </div>
     </footer>
 

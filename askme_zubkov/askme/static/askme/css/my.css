@@ -1,3 +1,12 @@
+header {
+    width: 100%;
+}
+
+/* .row.container {
+    margin-top: 50px;
+    clear: left;
+} */
+
 .profile_icon {
     width: 50%;
     border-radius: 50%;
@@ -7,6 +16,7 @@
     padding: 0px 16px;
     color: white;
 }
+
 
 .main_page_title {
     margin-top: 25px;
@@ -67,9 +77,25 @@ row.avatar_box {
     font-size: 1.5rem;
 }
 
-.popular_tags {
+.tags_header {
     font-size: 1.8rem;
+    margin-bottom: 25px;
+    margin-left: 35px;
 }
+
+.tags {
+    margin-left: auto;
+}
+.col.tag_item {
+    margin: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.col-4.tags_box {
+    margin-left: 10px;
+}
+
 /* .questions {
     margin-top: 40px;
 } */
