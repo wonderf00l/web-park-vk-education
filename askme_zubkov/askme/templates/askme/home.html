@@ -5,17 +5,19 @@
     <h1 class="main_page_title">AskMe Home Page</h1>
 
     <div class="row">
-        <div class="col-10">
-            {% include "askme/question.html" %}
+        <div class="col-8">
+            {% for question in questions %}
+                {% include "askme/question.html" %}
+            {% endfor %}
         </div>
-        <div class="col-2">
+        <div class="col-4" class="tags">
             <div class="row">
-                <div>TEXT1<div>
-            </div>
-            <div class="row">
-                <div>TEXT2<div>
+                <div class="popular_tags">Popular tags<div>
             </div>
         </div>
+        {% for tag in tags %}
+
+        {% endfor %}
     </div>
 
 {% endblock content %}
