@@ -7,3 +7,49 @@
     padding: 0px 16px;
     color: white;
 }
+
+.main_page_title {
+    margin-top: 25px;
+}
+
+.rating_counter {
+    width: 50%;
+    /* block-size: fit-content; */
+}
+
+.avatar {
+    width: 40%; 
+    border-radius: 50%;
+    margin-left:50px;
+    margin-bottom: 20px; 
+}
+
+.arrow {
+    width: 100%;
+}
+
+.btn btn-primary {
+    width: 100%;
+}
+
+#question_item {
+    /* border-block: solid;
+    box-sizing: border-box;
+    /* border-style: solid; */
+    padding: 10px;
+    border: 3px solid black;
+    border-radius: 10%;
+}
+
+.question_name {
+    text-decoration: underline;
+    font-size: 1.5rem;
+}
+
+/* .questions {
+    margin-top: 40px;
+} */
+
+/* .container main {
+    margin-top: 50px;
+} */

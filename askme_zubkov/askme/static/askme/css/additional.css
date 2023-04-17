@@ -3,6 +3,8 @@
 html {
     position: relative;
     min-height: 100%;
+    font-style: normal;
+    font-family: Arial, Helvetica, sans-serif;
   }
   body {
     /* Margin bottom by footer height */

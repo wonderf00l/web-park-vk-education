@@ -14,7 +14,8 @@ def homepage(request):
         "title" : "AskMe",
         "is_authorized" : True,
         "user_nickname" : "Mr. Pupkins",
-        "profile_icon_url" : "askme/img/profile.png"
+        "profile_icon_url" : "askme/img/profile.png",
+        "avatar" : "askme/img/avatar.png"
     }
     return render(request, 'askme/home.html', context=context) # django finds templates in 'templates' folder, therefore set path from this folder
 
