@@ -64,14 +64,16 @@
         <br> {% endcomment %}
         {% comment %} <div class="row"> {% endcomment %}
             
-                
-        {% block content %}
-        {% endblock content %}
-
-                {% comment %} {% block sidebar %}
-
-                {% endblock sidebar %} {% endcomment %}
-            
+        <div class="core_content">      
+            {% block core_content %}
+            {% endblock core_content %}
+        </div>
+            {% comment %} {% block sidebar %}
+        {% endblock sidebar %} {% endcomment %}
+        <div class="pages">
+            {% block pages %}
+            {% endblock pages %}
+        </div>
     </main>
     
     <footer class="footer">
