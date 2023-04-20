@@ -41,5 +41,17 @@ def question_page(request, question_id):
         "answers" : range(5)
     }
     return render(request, 'askme/question.html', context=context)
+
+def ask_question(request):
+    tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
+    best_members = ["pupkin", "petrov", "terminator", "aligator"]
+    context = {
+       "title" : "AskMe", 
+       "tags" : tags,
+        "tags_len": range(len(tags) - 2),
+        "best_members" : best_members
+    }
+    
+    return render(request, 'askme/ask.html', context=context) 
 # request - HttpRequest(query, session info)
 # HttpResponse arg (str) - HTML page's content

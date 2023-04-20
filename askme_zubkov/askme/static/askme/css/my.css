@@ -177,6 +177,11 @@ header {
     width: 100%;
 }
 
+.new_question_title {
+    margin-top: 10px;
+    margin-bottom: 20px; 
+}
+
 /* .pages::before {
     content: '\A'; white-space: pre;
 } */
