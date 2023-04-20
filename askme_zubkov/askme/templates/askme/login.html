@@ -1,0 +1,40 @@
+{% extends 'askme/base.html' %}
+
+{% block core_content %}
+
+    <div class="row login_box">
+
+        <h2 class="new_question_title">Log In</h2>
+
+        <div class="error_message">Potential error msg</div>
+        
+        <div class="row">
+
+            <div class="col-8">
+
+                <form class="login_form">
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Nick</label>
+                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label">Password</label>
+                      <input type="password" class="form-control" id="exampleInputPassword1">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                </form>
+                
+                <a href="#" style="text-decoration: underline">create new account</a>
+
+            </div>
+
+            <div class="col-4">
+
+                {% include "askme/sidebar.html" %}
+                
+            </div>
+
+        </div>
+    </div>
+
+{% endblock core_content %}

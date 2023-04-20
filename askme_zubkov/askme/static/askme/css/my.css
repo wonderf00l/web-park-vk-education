@@ -1,5 +1,5 @@
-header {
-    width: 100%;
+.head {
+    margin-bottom: 25px;
 }
 
 /* .row.container {
@@ -127,7 +127,7 @@ header {
 .tags_header {
     font-size: 1.8rem;
     margin-bottom: 25px;
-    margin-top: 10px;
+    margin-top: 45px;
     margin-left: 35px;
 }
 
@@ -178,8 +178,23 @@ header {
 }
 
 .new_question_title {
+    width: 100%;
     margin-top: 10px;
     margin-bottom: 20px; 
+}
+
+.error_message {
+    color: red;
+    margin-bottom: 10px;
+}
+
+.login_title {
+    width: 100%;
+    margin-bottom: 20px;  
+}
+
+.login_form {
+    padding-bottom: 15px;
 }
 
 /* .pages::before {

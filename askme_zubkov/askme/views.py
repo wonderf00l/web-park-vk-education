@@ -53,5 +53,18 @@ def ask_question(request):
     }
     
     return render(request, 'askme/ask.html', context=context) 
+
+def login(request):
+    tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
+    best_members = ["pupkin", "petrov", "terminator", "aligator"]
+    context = {
+       "title" : "AskMe", 
+       "tags" : tags,
+        "tags_len": range(len(tags) - 2),
+        "best_members" : best_members
+    }
+    
+    return render(request, 'askme/login.html', context=context) 
+
 # request - HttpRequest(query, session info)
 # HttpResponse arg (str) - HTML page's content
