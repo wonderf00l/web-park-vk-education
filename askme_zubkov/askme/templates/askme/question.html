@@ -40,6 +40,25 @@
                 </div>
             </div>
 
+            <div class="row answers">
+                {% for answer in answers %}
+                    <div class="row answer">
+                        {% include "askme/answer_item.html" %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="row answer_form">
+                <div class="mb-3">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter your answer here"></textarea>
+                </div>
+
+                <button class="btn btn-outline-success" type="submit">Answer</button>
+
+            </div>
+
+            
+
         </div>
 
         <div class="col-4">

@@ -36,7 +36,9 @@ def question_page(request, question_id):
         "tags" : tags,
         "tags_len": range(len(tags) - 2),
         "best_members" : best_members,
-        "question_content" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        "question_content" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        "answer_content" : "JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT",
+        "answers" : range(5)
     }
     return render(request, 'askme/question.html', context=context)
 # request - HttpRequest(query, session info)
