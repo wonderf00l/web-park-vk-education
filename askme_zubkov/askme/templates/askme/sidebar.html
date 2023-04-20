@@ -9,10 +9,14 @@
     {% endfor %}
 </div>
 
-<div class="row best_members">
-    <div class="row">
+
+{% comment %} <div class="row best_members"> {% endcomment %}
+    {% comment %} <div class="row">
         <div class="best_members_header">Best members<div>
-    </div>
+    </div> {% endcomment %} 
+
+    <span class="best_members_header">Best members<span>
+
     <div class="row members_list">
         {% for member in best_members %}
             {% comment %} <div class="row best_member"> {% endcomment %}
@@ -20,4 +24,4 @@
             {% comment %} </div> {% endcomment %}
         {% endfor %}
     </div>
-</div>
+{% comment %} </div>  {% endcomment %}
