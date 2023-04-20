@@ -1,0 +1,39 @@
+{% load static %}
+
+<div class="row question_item">
+    <div class="col-2">
+        <div class="row avatar_box">
+            <img class="avatar" src="{% static 'askme/img/avatar.png' %}">
+        </div>
+        <div class="row">
+            {% comment %} {% include "askme/rating_counter.html" %} {% endcomment %}
+            <div class="col-4 arrow-box">
+                <button type="button" class="btn btn-primary arrow">↑</button>
+            </div>
+            <div class="col-4 rate_box">
+                <button type="button" class="btn btn-primary rate">2</button>
+            </div>
+            <div class="col-4 arrow-box">
+                <button type="button" class="btn btn-primary arrow">↓</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-10 q_content">
+        <div class="row">
+            <a href="#" class="question_name_ref">How to breathe?</a>
+        </div>
+        <div class="row">
+            {{ question_content|truncatewords:30 }}
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <a href="#" class="answers_quantity">answer (3)</a>
+            </div>
+            <div class="col-8">
+                <span>Tags: </span>
+                <a href="#">tag 1</a>
+                <a href="#">tag 2</a>
+            </div>
+        </div>
+    </div>
+</div>

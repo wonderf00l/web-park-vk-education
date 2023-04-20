@@ -24,21 +24,40 @@
 {% endblock content %} {% endcomment %}
 
 
-{% block content %}
+{% block core_content %}
 
-    <h1 class="main_page_title">AskMe Home Page</h1>
-
+    <div class="row core_content_header">
+        <div class="col-3">
+            <h2 class="main_page_title">New questions</h2>
+        </div>
+        <div class="col-9 hot_questions">
+            <h2><a href="#">Hot questions</a></h2>
+        </div>
+    </div>
+    
     <div class="row">
 
         <div class="col-8">
 
             {% for question in questions %}
-                {% include "askme/question.html" %}
+                {% include "askme/question_item.html" %}
             {% endfor %}
-        </div>
-    
-        {% include "askme/sidebar.html" %}
 
+        </div>
+
+        <div class="col-4">
+
+            {% include "askme/sidebar.html" %}
+            
+        </div>
 
     </div>
-{% endblock content %}
+
+{% endblock core_content %}
+
+
+{% block pages %}
+    <div class="pages">
+        {% include "askme/pages.html" %}
+    </div>
+{% endblock pages %}

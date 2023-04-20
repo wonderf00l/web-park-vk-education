@@ -4,6 +4,6 @@ from .views import *
 
 urlpatterns = [
     path('', homepage, name='home'),
-    path('<slug:subsite>/', handler, name='subsite')
+    path('question/<int:question_id>/', question_page, name='question_page')
 ]
 
