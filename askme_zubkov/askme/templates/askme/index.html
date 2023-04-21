@@ -1,29 +1,5 @@
 {% extends 'askme/base.html' %}
 
-{% comment %} {% block content %}
-
-    <h1 class="main_page_title">AskMe Home Page</h1>
-
-    <div class="row">
-        <div class="col-8">
-            {% for question in questions %}
-                {% include "askme/question.html" %}
-            {% endfor %}
-        </div>
-        <div class="col-4">
-            <div class="row">
-                <div class="tags_header">Popular tags<div>
-            </div>
-        </div>
-            <div class="row tags">
-                {% for tag in tags %}
-                    <div class="col tag_item"> {{ tag }} </div>
-                {% endfor %}
-    </div>
-
-{% endblock content %} {% endcomment %}
-
-
 {% block core_content %}
     
     <div class="row">

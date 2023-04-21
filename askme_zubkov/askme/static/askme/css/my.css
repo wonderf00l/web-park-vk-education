@@ -1,6 +1,12 @@
 .head {
     margin-bottom: 25px;
+    width: 100%;
 }
+
+/* header {
+    display: block;
+    width: 100%;
+} */
 
 /* .row.container {
     margin-top: 50px;
