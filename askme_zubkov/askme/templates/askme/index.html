@@ -25,19 +25,19 @@
 
 
 {% block core_content %}
-
-    <div class="row core_content_header">
-        <div class="col-3">
-            <h2 class="main_page_title">New questions</h2>
-        </div>
-        <div class="col-9 hot_questions">
-            <h2><a href="#">Hot questions</a></h2>
-        </div>
-    </div>
     
     <div class="row">
 
         <div class="col-8">
+
+            <div class="row core_content_header">
+                <div class="col-6">
+                    <h2 class="main_page_title">New questions</h2>
+                </div>
+                <div class="col-6 hot_questions">
+                    <h2><a href="#">Hot questions</a></h2>
+                </div>
+            </div>
 
             {% for question in questions %}
                 {% include "askme/question_item.html" %}

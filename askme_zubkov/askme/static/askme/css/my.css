@@ -186,6 +186,7 @@
 .error_message {
     color: red;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 .login_title {
@@ -196,6 +197,7 @@
 .login_form {
     padding-bottom: 15px;
 }
+
 
 /* .pages::before {
     content: '\A'; white-space: pre;
