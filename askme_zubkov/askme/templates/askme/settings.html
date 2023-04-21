@@ -1,0 +1,15 @@
+{% extends "askme/register.html" %}
+{% load static %}
+{% block title %}
+    <h2 class="account_title">{{ account_name }}: settings</h2>
+{% endblock title %}
+{% block forms_content %}
+    <div class="mb-3">
+        <label for="formFile" class="form-label">Upload avatar</label>
+        <div class="row avatar_box">
+            <img class="avatar" src="{% static 'askme/img/avatar.png' %}">
+        </div>
+        <input class="form-control" type="file" id="formFile">
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+{% endblock forms_content %}
