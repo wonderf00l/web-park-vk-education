@@ -27,20 +27,19 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-2">
-                        <a class="navbar-brand" href="#">AskMe</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
+                        <a class="navbar-brand" href="{% url 'home' %}">AskMe</a>
                     </div>
-                    <div class="col-3">
-                        <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="col-9">
+                                <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-outline-success search_btn" type="submit">Search</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-2">
-                        <form class="form-inline">
-                            <button class="btn btn-outline-success" type="submit">Ask</button>
-                          </form>
-                    </div>
-                    <div class="col-5">
+                    <div class="col-6">
                         {% block userblock %}
                             {% if is_authorized == True %}
                                 {% include "askme/authorized.html" %}

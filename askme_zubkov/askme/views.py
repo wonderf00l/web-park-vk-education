@@ -12,13 +12,23 @@ def handler(request, subsite):  # exactly the same name of the arg
 
 def homepage(request):
     # check authorization then make context dir and handler
+    menu = [
+        {"url" : "home"},
+        {"url" : "#"},
+        {"url" : "ask"},
+        {"url" : "settings"},
+        #log out
+        {"url" : "login"},
+        {"url" : "register"},
+    ]
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
         "title":
         "AskMe",
+        "menu" : menu,
         "is_authorized":
-        True,
+        False,
         "user_nickname":
         "Mr. Pupkins",
         "profile_icon_url":

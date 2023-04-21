@@ -3,10 +3,23 @@
 
 {% block userblock %}
     <div class="row">
-        <div class="col-4">
-            <img class="profile_icon" src="{% static profile_icon_url %}">
+        <div class="col-6">
+            <div class="row box1">
+                <div class="col-3 box2">
+                    <div class="centered_element">
+                        <form class="form-inline">
+                            <a href="{% url 'ask' %}" class="btn btn-outline-success" type="submit">Ask</a>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-9 box3">
+                    <div class="img box">
+                        <img class="profile_icon" src="{% static profile_icon_url %}">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-8">
+        <div class="col-6">
             <div class="row">
                 <div class="nick">
                     {{ user_nickname }}
@@ -14,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <a class="btn btn-primary" href="#" role="button">settings</a>
+                    <a class="btn btn-primary" href="{% url 'settings' %}" role="button">settings</a>
                 </div>
                 <div class="col">
                     <a class="btn btn-primary" href="#" role="button">log out</a>
