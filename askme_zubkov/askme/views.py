@@ -1,32 +1,33 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 
 # Create your views here.
 
 
-def handler(request, subsite):  # exactly the same name of the arg
-    status = request.GET.get('status')
-    print(subsite)
-    return HttpResponse(f"{status}, so hello world")
+# def handler(request, subsite):  # exactly the same name of the arg
+#     status = request.GET.get('status')
+#     print(subsite)
+#     return HttpResponse(f"{status}, so hello world")
 
 
 def homepage(request):
     # check authorization then make context dir and handler
     menu = [
-        {"url" : "home"},
-        {"url" : "#"},
-        {"url" : "ask"},
-        {"url" : "settings"},
-        #log out
-        {"url" : "login"},
-        {"url" : "register"},
+        {"url": "home"},
+        {"url": "#"},
+        {"url": "ask"},
+        {"url": "settings"},
+        # log out
+        {"url": "login"},
+        {"url": "register"},
     ]
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
         "title":
         "AskMe",
-        "menu" : menu,
+        "menu": menu,
         "is_authorized":
         False,
         "user_nickname":
@@ -108,18 +109,26 @@ def register(request):
 
     return render(request, 'askme/register.html', context=context)
 
+
 def settings(request):
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
         "title": "AskMe",
-        "account_name" : "Chris Buck",
+        "account_name": "Chris Buck",
         "tags": tags,
         "tags_len": range(len(tags) - 2),
         "best_members": best_members
     }
 
     return render(request, 'askme/settings.html', context=context)
+
+
+def paginate(obj_list, request, per_page=10):
+    paginator = Paginator(obj_list, per_page)
+    page_num = request.GET.get('page')
+    page_obj = paginator.get_page(page_num)
+    return page_obj
 
 # request - HttpRequest(query, session info)
 # HttpResponse arg (str) - HTML page's content
