@@ -29,7 +29,7 @@ def homepage(request):
         "AskMe",
         "menu": menu,
         "is_authorized":
-        False,
+        True,
         "user_nickname":
         "Mr. Pupkins",
         "profile_icon_url":

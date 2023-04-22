@@ -1,27 +1,8 @@
-
-<div class="row">
-    <div class="tags_header">Popular tags<div>
-</div>
-
+<div class="tags_header">Popular tags</div>
 <div class="row tags">
-    {% for tag in tags %}
-        <div class="col tag_item"> {{ tag }} </div>
-    {% endfor %}
+    {% for tag in tags %}<div class="col tag_item">{{ tag }}</div>{% endfor %}
 </div>
-
-
-{% comment %} <div class="row best_members"> {% endcomment %}
-    {% comment %} <div class="row">
-        <div class="best_members_header">Best members<div>
-    </div> {% endcomment %} 
-
-    <span class="best_members_header">Best members<span>
-
-    <div class="row members_list">
-        {% for member in best_members %}
-            {% comment %} <div class="row best_member"> {% endcomment %}
-            <a class="best_member_ref" href="#">{{ member }}</a>
-            {% comment %} </div> {% endcomment %}
-        {% endfor %}
-    </div>
-{% comment %} </div>  {% endcomment %}
+<div class="best_members_header">Best members</div>
+<div class="row members_list">
+    {% for member in best_members %}<a class="best_member_ref" href="#">{{ member }}</a>{% endfor %}
+</div>

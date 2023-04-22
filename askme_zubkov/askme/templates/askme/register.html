@@ -1,58 +1,62 @@
-{% extends 'askme/base.html' %}
-
+{% extends "askme/base.html" %}
 {% block core_content %}
-
-    <div class="row login_box">
-        
-        <div class="row">
-
-            <div class="col-8">
-
-                {% block title %}<h2 class="account_title">Register</h2> {% endblock title %}
-
-                <div class="error_message">Potential error msg</div>
-
-                <form class="register_form">
-                    <div class="mb-3">
-                      <label class="form-label">Login(under 50 symbols)</label>
-                      <input type="text" class="form-control" aria-describedby="emailHelp" maxlength="50" placeholder="Chris Buck" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="buckkk@gmail.com" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nickname(under 50 symbols)</label>
-                        <input type="text" class="form-control" maxlength="50" placeholder="BUCKet123" required>
-                      </div>
-                    {% block forms_content %}  
-                        <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Password(from 6 to 20 symbols)</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" minlength="6" maxlength="20" placeholder="password" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Repeat Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" minlength="6" maxlength="20" placeholder="password" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label">Upload avatar</label>
-                            <input class="form-control" type="file" id="formFile">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Register</button>
-                    {% endblock forms_content %}
-                </form>
-                
-            </div>
-
-            <div class="col-4">
-
-                {% include "askme/sidebar.html" %}
-                
-            </div>
-
+    {% block title %}
+        <h2 class="account_title">Register</h2>
+    {% endblock title %}
+    <div class="error_message">Potential error msg</div>
+    <form class="register_form">
+        <div class="mb-3">
+            <label class="form-label">Login(under 50 symbols)</label>
+            <input type="text"
+                   class="form-control"
+                   aria-describedby="emailHelp"
+                   maxlength="50"
+                   placeholder="Chris Buck"
+                   required>
         </div>
-    </div>
-
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email</label>
+            <input type="email"
+                   class="form-control"
+                   id="exampleInputEmail1"
+                   aria-describedby="emailHelp"
+                   placeholder="buckkk@gmail.com"
+                   required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Nickname(under 50 symbols)</label>
+            <input type="text"
+                   class="form-control"
+                   maxlength="50"
+                   placeholder="BUCKet123"
+                   required>
+        </div>
+        {% block forms_content %}
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password(from 6 to 20 symbols)</label>
+                <input type="password"
+                       class="form-control"
+                       id="exampleInputPassword1"
+                       minlength="6"
+                       maxlength="20"
+                       placeholder="password"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Repeat Password</label>
+                <input type="password"
+                       class="form-control"
+                       id="exampleInputPassword1"
+                       minlength="6"
+                       maxlength="20"
+                       placeholder="password"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Upload avatar</label>
+                <input class="form-control" type="file" id="formFile">
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        {% endblock forms_content %}
+    </form>
 {% endblock core_content %}

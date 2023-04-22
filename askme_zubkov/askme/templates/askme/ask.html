@@ -1,60 +1,48 @@
-{% extends 'askme/base.html' %}
-
+{% extends "askme/base.html" %}
 {% block core_content %}
-
-    <div class="row question_form_box">
-        
-        <div class="row">
-
-            <div class="col-8">
-
-                <h2 class="new_question_title">New Question</h2>
-
-                <div class="error_message">Potential error msg</div>
-
-                <div class="row">
-                    <div class="col-3">
-                        <span>Title</span>
-                    </div>
-                    <div class="col-9">
-                        <div class="mb-3">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter the title" required></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-3">
-                        <span>Text</span>
-                    </div>
-                    <div class="col-9">
-                        <div class="mb-3">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter question content" required></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-3">
-                        <span>Tags</span>
-                    </div>
-                    <div class="col-9">
-                        <div class="mb-3">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Add tags" required></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="btn btn-outline-success" type="submit">Ask</button>
-
+    <h2 class="new_question_title">New Question</h2>
+    <div class="error_message">Potential error msg</div>
+    <div class="row">
+        <div class="col-3">
+            <span>Title</span>
+        </div>
+        <div class="col-9">
+            <div class="mb-3">
+                <textarea class="form-control"
+                          id="exampleFormControlTextarea1"
+                          rows="3"
+                          placeholder="Enter the title"
+                          required></textarea>
             </div>
-
-            <div class="col-4">
-
-                {% include "askme/sidebar.html" %}
-                
-            </div>
-
         </div>
     </div>
+    <div class="row">
+        <div class="col-3">
+            <span>Text</span>
+        </div>
+        <div class="col-9">
+            <div class="mb-3">
+                <textarea class="form-control"
+                          id="exampleFormControlTextarea1"
+                          rows="3"
+                          placeholder="Enter question content"
+                          required></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <span>Tags</span>
+        </div>
+        <div class="col-9">
+            <div class="mb-3">
+                <textarea class="form-control"
+                          id="exampleFormControlTextarea1"
+                          rows="3"
+                          placeholder="Add tags"
+                          required></textarea>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-outline-success" type="submit">Ask</button>
 {% endblock core_content %}

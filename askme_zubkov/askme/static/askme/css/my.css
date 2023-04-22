@@ -3,16 +3,6 @@
     width: 100%;
 }
 
-/* header {
-    display: block;
-    width: 100%;
-} */
-
-/* .row.container {
-    margin-top: 50px;
-    clear: left;
-} */
-
 .profile_icon {
     width: 100%;
     border-radius: 50%;
@@ -35,7 +25,6 @@
 
 .col-9.box3 {
     padding-left: 30%;
-    /* padding: 50% 0 50% 35px */
 }
 
 .img_box {
@@ -55,18 +44,6 @@
 .row.unauthorized {
     margin-left: 30%;
 }
-
-/* .row.core_content::after {
-    content: '\A'; white-space: pre;
-} */
-
-/* .core_content {
-    width: 100%;
-} */
-
-/* .btn.btn-outline-success.search_btn {
-    display: inline;
-} */
 
 .row.core_content_header {
     margin-top: 40px;
@@ -91,9 +68,10 @@
     width: 100%;
 }
 
-.row.best_members_header {
+.best_members_header {
     font-size: 1.8rem;
-    margin: 10px;
+    /* margin: 15px 10px 10px 10px; */
+    padding-left: 10%;
 }
 
 .row.members_list {
@@ -101,15 +79,9 @@
     padding-left: 33px;
 }
 
-/* .row.best_members {
-    margin-top: 35px;
-    margin-left: 5px;
-} */
-
 
 .rating_counter {
     width: 50%;
-    /* block-size: fit-content; */
 }
 
 
@@ -145,13 +117,9 @@
     width: 70%;
     height: 70%;
     padding: 0;
-    /* text-align: center; */
 }
 
 .row.question_item {
-    /* border-block: solid;
-    box-sizing: border-box;
-    /* border-style: solid; */
     padding: 10px;
     border: 3px solid black;
     border-radius: 10%;
@@ -169,9 +137,8 @@
 
 .tags_header {
     font-size: 1.8rem;
-    margin-bottom: 25px;
-    margin-top: 45px;
-    margin-left: 35px;
+    margin-top: 15%;
+    padding-left: 10%;
 }
 
 .row.tags {
@@ -246,14 +213,3 @@
     margin-top: 10px;
     margin-bottom: 20px; 
 }
-
-/* .pages::before {
-    content: '\A'; white-space: pre;
-} */
-/* .questions {
-    margin-top: 40px;
-} */
-
-/* .container main {
-    margin-top: 50px;
-} */

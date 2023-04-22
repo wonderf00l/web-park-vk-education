@@ -1,78 +1,50 @@
-{% extends 'askme/base.html' %}
+{% extends "askme/base.html" %}
 {% load static %}
-
 {% block core_content %}
-
-    <div class="row question_page_box">
-
-        <div class="col-8">
-
-            <div class="row question_to_answer">
-                <div class="col-2 avatar_box_outer">
-                    <div class="row avatar_box">
-                        <img class="avatar" src="{% static 'askme/img/avatar.png' %}">
-                    </div>
-                    <div class="row">
-                        {% comment %} {% include "askme/rating_counter.html" %} {% endcomment %}
-                        <div class="col-4 arrow-box">
-                            <button type="button" class="btn btn-primary arrow">↑</button>
-                        </div>
-                        <div class="col-4 rate_box">
-                            <button type="button" class="btn btn-primary rate">2</button>
-                        </div>
-                        <div class="col-4 arrow-box">
-                            <button type="button" class="btn btn-primary arrow">↓</button>
-                        </div>
-                    </div>
+    <div class="row question_to_answer">
+        <div class="col-2 avatar_box_outer">
+            <div class="row avatar_box">
+                <img class="avatar" src="{% static 'askme/img/avatar.png' %}" alt="avatar">
+            </div>
+            <div class="row">
+                <div class="col-4 arrow-box">
+                    <button type="button" class="btn btn-primary arrow">↑</button>
                 </div>
-                <div class="col-10 q_content">
-                    <div class="row">
-                        <div class="question_name">How to breathe?</div>
-                    </div>
-                    <div class="row">
-                        {{ question_content|truncatewords:30 }}
-                    </div>
-                    <div class="row">
-                        <span>Tags: </span>
-                        <a href="#">tag 1</a>
-                        <a href="#">tag 2</a>
-                    </div>
+                <div class="col-4 rate_box">
+                    <button type="button" class="btn btn-primary rate">2</button>
+                </div>
+                <div class="col-4 arrow-box">
+                    <button type="button" class="btn btn-primary arrow">↓</button>
                 </div>
             </div>
-
-            <div class="row answers">
-                {% for answer in answers %}
-                    <div class="row answer">
-                        {% include "askme/answer_item.html" %}
-                    </div>
-                {% endfor %}
-            </div>
-
-            <div class="row answer_form">
-                <div class="mb-3">
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter your answer here"></textarea>
-                </div>
-
-                <button class="btn btn-outline-success" type="submit">Answer</button>
-
-            </div>
-
-            
-
         </div>
-
-        <div class="col-4">
-
-            {% include "askme/sidebar.html" %}
-            
+        <div class="col-10 q_content">
+            <div class="row">
+                <div class="question_name">How to breathe?</div>
+            </div>
+            <div class="row">{{ question_content|truncatewords:30 }}</div>
+            <div class="row">
+                <span>Tags:</span>
+                <a href="#">tag 1</a>
+                <a href="#">tag 2</a>
+            </div>
         </div>
-
     </div>
-
+    <div class="row answers">
+        {% for answer in answers %}
+            <div class="row answer">{% include "askme/answer_item.html" %}</div>
+        {% endfor %}
+    </div>
+    <div class="row answer_form">
+        <div class="mb-3">
+            <textarea class="form-control"
+                      id="exampleFormControlTextarea1"
+                      rows="3"
+                      placeholder="Enter your answer here"></textarea>
+        </div>
+        <button class="btn btn-outline-success" type="submit">Answer</button>
+    </div>
 {% endblock core_content %}
-
 {% block pages %}
-    <div class="pages">
-        {% include "askme/paginator.html" %}
-    </div>
+    <div class="pages">{% include "askme/paginator.html" %}</div>
 {% endblock pages %}
