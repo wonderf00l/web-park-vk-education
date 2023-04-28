@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'askme' # добавляем приложения
+    'askme',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
