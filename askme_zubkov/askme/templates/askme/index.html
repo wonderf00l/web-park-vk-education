@@ -10,8 +10,8 @@
             </h2>
         </div>
     </div>
-    {% for question in questions %}
-        {% include "askme/question_item.html" %}
+    {% for question_ in page.object_list %}
+        {% include "askme/question_item.html" with question=question_ %} {%comment%}provide variable to the included html{%endcomment%}
     {% endfor %}
 {% endblock core_content %}
 {% block pages %}

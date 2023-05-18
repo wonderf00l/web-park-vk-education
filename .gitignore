@@ -5,6 +5,7 @@ draft.*
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
 ### Django ###
+theory
 *.log
 *.pot
 *.pyc

@@ -1,33 +1,21 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.core.paginator import Paginator
+from django.http import HttpResponse, HttpResponsePermanentRedirect, Http404
+from django.core.paginator import Paginator, EmptyPage
+from django.views.decorators.http import require_GET
+from .models import *
 
-# Create your views here.
-
-
-# def handler(request, subsite):  # exactly the same name of the arg
-#     status = request.GET.get('status')
-#     print(subsite)
-#     return HttpResponse(f"{status}, so hello world")
-
-
+@require_GET
 def homepage(request):
-    # check authorization then make context dir and handler
-    menu = [
-        {"url": "home"},
-        {"url": "#"},
-        {"url": "ask"},
-        {"url": "settings"},
-        # log out
-        {"url": "login"},
-        {"url": "register"},
-    ]
-    tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
+    return HttpResponsePermanentRedirect('/questions/')
+
+@require_GET
+def recent_questions(request):
+    questions = Question.objects.recently_asked(quantity = 1000)
+    page = paginate(request, questions, per_page=20)
+    paginator, active_page = page.paginator, page.number
+    tags = Question.objects.tags()
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "title":
-        "AskMe",
-        "menu": menu,
         "is_authorized":
         True,
         "user_nickname":
@@ -36,36 +24,28 @@ def homepage(request):
         "askme/img/profile.png",
         "avatar":
         "askme/img/avatar.png",
-        "questions":
-        range(20),
+        "page":page,
+        "paginator":paginator,
+        "active_page":active_page,
         "tags":
         tags,
-        "tags_len":
-        range(len(tags) - 2),
         "best_members":
-        best_members,
-        "question_content":
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        best_members
     }
-    return render(
-        request, 'askme/index.html', context=context
-    )  # django finds templates in 'templates' folder, therefore set path from this folder
-
+    return render(request, 'askme/index.html', context=context)   # django finds templates in 'templates' folder, therefore set path from this folder
+    
+@require_GET
+def tag_questions(request, tag_name):
+    pass
 
 def question_page(request, question_id):
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "title": "AskMe",
         "avatar": "askme/img/avatar.png",
-        "questions": range(20),
+        "question": Question.objects.get(id=question_id),
         "tags": tags,
-        "tags_len": range(len(tags) - 2),
         "best_members": best_members,
-        "question_content":
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-        "answer_content":
-        "JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT JUST DO IT",
         "answers": range(5)
     }
     return render(request, 'askme/question.html', context=context)
@@ -75,9 +55,7 @@ def ask_question(request):
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "title": "AskMe",
         "tags": tags,
-        "tags_len": range(len(tags) - 2),
         "best_members": best_members
     }
 
@@ -88,9 +66,7 @@ def login(request):
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "title": "AskMe",
         "tags": tags,
-        "tags_len": range(len(tags) - 2),
         "best_members": best_members
     }
 
@@ -101,9 +77,7 @@ def register(request):
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "title": "AskMe",
         "tags": tags,
-        "tags_len": range(len(tags) - 2),
         "best_members": best_members
     }
 
@@ -114,21 +88,35 @@ def settings(request):
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "title": "AskMe",
         "account_name": "Chris Buck",
         "tags": tags,
-        "tags_len": range(len(tags) - 2),
         "best_members": best_members
     }
 
     return render(request, 'askme/settings.html', context=context)
 
+def paginate(request, objects, per_page=20):
+    try:
+        page_num = int(request.GET.get('page', 1))
+    except ValueError:
+        raise Http404 
+    try:
+       page_limit = int(request.GET.get('limit', per_page))
+    except ValueError:
+       page_limit = per_page
+    if page_limit > per_page:
+       page_limit = per_page
+    paginator = Paginator(objects, per_page)
+    paginator.base_url='/questions/?page='
+    try:
+        page = paginator.get_page(page_num)
+    except EmptyPage: # Raised when page() is given a valid value but no objects exist on that page
+        page = paginator.get_page(paginator.num_pages)
+    return page
 
-def paginate(obj_list, request, per_page=10):
-    paginator = Paginator(obj_list, per_page)
-    page_num = request.GET.get('page')
-    page_obj = paginator.get_page(page_num)
-    return page_obj
+@require_GET
+def some_view():
+    pass
 
 # request - HttpRequest(query, session info)
 # HttpResponse arg (str) - HTML page's content

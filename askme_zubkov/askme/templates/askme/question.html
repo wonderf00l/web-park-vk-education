@@ -20,7 +20,7 @@
         </div>
         <div class="col-10 q_content">
             <div class="row">
-                <div class="question_name">How to breathe?</div>
+                <div class="question_name">{{ question.title }}</div>
             </div>
             <div class="row">{{ question_content|truncatewords:30 }}</div>
             <div class="row">
@@ -45,6 +45,3 @@
         <button class="btn btn-outline-success" type="submit">Answer</button>
     </div>
 {% endblock core_content %}
-{% block pages %}
-    <div class="pages">{% include "askme/paginator.html" %}</div>
-{% endblock pages %}

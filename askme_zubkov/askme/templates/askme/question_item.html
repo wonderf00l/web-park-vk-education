@@ -18,17 +18,18 @@
     </div>
     <div class="col-10 q_content">
         <div class="row">
-            <a href="#" class="question_name_ref">How to breathe?</a>
+            <a href="{{ question.get_url }}" class="question_name_ref">{{ question.title }}</a>
         </div>
-        <div class="row">{{ question_content|truncatewords:30 }}</div>
+        <div class="row">{{ question.content|truncatewords:30 }}</div>
         <div class="row">
             <div class="col-4">
                 <a href="#" class="answers_quantity">answer (3)</a>
             </div>
             <div class="col-8">
                 <span>Tags:</span>
+                {% for tag in tags %}
                 <a href="#">tag 1</a>
-                <a href="#">tag 2</a>
+                {% endfor %}
             </div>
         </div>
     </div>
