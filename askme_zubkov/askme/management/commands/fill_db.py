@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.utils import IntegrityError
 from random import randint
 
-# obj_id = randint - without QuierySets
+# obj_id = randint - without QuierySets - THE MOST EFFICIENT WAY
 # get QuierySet -- QuierySet[randint]
 # seperate one-operation functions: nested behaviour
 
@@ -58,41 +58,32 @@ class Command(BaseCommand):
 
         # profiles = User.objects.all()
 
-        offset = 0
+        # offset = 0
+
+        profiles_last = Profile.objects.last().id
 
         for i in range(chunks_quantity):
-            profiles = User.objects.all()[offset:offset+chunk_size]
-            if not len(profiles):
-                offset = 0
-                profiles = User.objects.all()[offset:offset+chunk_size]
             Question.objects.bulk_create([
                 Question(title=self.fake.unique.catch_phrase(
-                ), content=self.fake.text(), author=profiles[randint(0, len(profiles) - 1)])
+                ), content=self.fake.text(), author_id=randint(1, profiles_last))
                 for j in range(chunk_size)
             ])
-            offset += chunk_size
+            # offset += chunk_size
 
-    def create_answers(self, answers_quantity, profiles_quantity, chunks_quantity=100):
+    def create_answers(self, answers_quantity, chunks_quantity=100):
 
         chunk_size = int(answers_quantity / chunks_quantity)
 
-        offset = 0
+        profiles_last = Profile.objects.last().id
+        questions_last = Question.objects.last().id
 
         for i in range(chunks_quantity):
-            profiles = User.objects.all()[offset:offset+chunk_size]
-            questions = Question.objects.all()[offset:offset+chunk_size]
-
-            if not len(profiles) or not len(questions):
-                offset = 0
-                profiles = User.objects.all()[offset:offset+chunk_size]
-                questions = Question.objects.all()[offset:offset+chunk_size]
 
             Answer.objects.bulk_create([
-                Answer(content=self.fake.text(), correctness_degree=randint(1, profiles_quantity), author=profiles[randint(0, len(profiles) - 1)],
-                    question=questions[randint(0, len(questions) - 1)])
+                Answer(content=self.fake.text(), correctness_degree=randint(1, profiles_last), author_id=randint(1, profiles_last),
+                    question_id=randint(1, questions_last))
                 for j in range(chunk_size)
             ])
-            offset+=chunk_size
 
     def create_likes(self, likes_quantity, chunks_quantity=10000):
 
@@ -107,58 +98,40 @@ class Command(BaseCommand):
             Question), ContentType.objects.get_for_model(Answer)
         content_types = (ct_question, ct_answer)
 
-        offset = 0
-
-        profiles = User.objects.all()
+        profiles_last = User.objects.last().id
+        questions_last = Question.objects.last().id
+        answers_last = Answer.objects.last().id
 
         for i in range(chunks_quantity):
-
-            questions = Question.objects.all()[offset:offset+chunk_size]
-            answers = Answer.objects.all()[offset:offset+chunk_size]
-
-            if not len(questions) or not len(answers):
-                offset = 0
-                questions = Question.objects.all()[offset:offset+chunk_size]
-                answers = Answer.objects.all()[offset:offset+chunk_size]
 
             likes = list()
 
             for j in range(chunk_size):
                 content_type_ = content_types[randint(0, len(content_types) - 1)]
-                obj_id = randint(1, len(questions)) if content_type_ == ct_question else randint(
-                    1, len(answers))
-                likes.append(Like(content_type=content_type_, object_id=obj_id, author=profiles[randint(0, len(profiles) - 1)]))
+                obj_id = randint(1, questions_last) if content_type_ == ct_question else randint(
+                    1, answers_last)
+                likes.append(Like(content_type=content_type_, object_id=obj_id, author_id=randint(1, profiles_last)))
 
             Like.objects.bulk_create(likes, ignore_conflicts=True) # ignore IntegrityError
-            offset+=chunk_size
             
             # if (Assessment.objects.last().id and Assessment.objects.last().id == likes_quantity):
             #     break
 
-            # check that 1 author -- 1 like/dislike or 1 like/dis + 1 dislike/like (Model.objects.annotate(group by author id) --> check len(value) --> if != 1 and like/dislike only --> exception)
 
-
-    def create_tags(self, tags_quantity, chunks_quantity=100):
+    def create_tags(self, tags_quantity, chunks_quantity=10):
             
         chunk_size = int(tags_quantity / chunks_quantity)
 
-        offset = 0
+        questions_last = Question.objects.last().id
         
         for i in range(chunks_quantity):
-            questions = Question.objects.all()[offset:offset+chunk_size]
-
-            if not len(questions):
-                offset = 0
-                questions = Question.objects.all()[offset:offset+chunk_size]
 
             tags = [Tag(name=self.fake.unique.catch_phrase())
                     for j in range(chunk_size)]
-            Tag.objects.bulk_create(tags)
+            tags = Tag.objects.bulk_create(tags)
 
             for tag in tags:
-                tag.question.add(questions[randint(0, len(questions) - 1)])
-
-            offset+=chunk_size
+                tag.questions.add(*[randint(1, questions_last) for j in range(20)])
 
     def handle(self, *args, **options):
         profiles_quantity = options["ratio"]

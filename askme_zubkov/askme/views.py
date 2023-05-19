@@ -1,19 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponsePermanentRedirect, Http404
+from django.http import HttpResponsePermanentRedirect, Http404
 from django.core.paginator import Paginator, EmptyPage
 from django.views.decorators.http import require_GET
 from .models import *
 
 @require_GET
 def homepage(request):
-    return HttpResponsePermanentRedirect('/questions/')
+    return HttpResponsePermanentRedirect('/questions/recent/')
 
-@require_GET
-def recent_questions(request):
-    questions = Question.objects.recently_asked(quantity = 1000)
+def questions_list(request, processor,url_infix):
+    questions = processor(quantity = 1000)
     page = paginate(request, questions, per_page=20)
     paginator, active_page = page.paginator, page.number
-    tags = Question.objects.tags()
+    paginator.base_url=f'/questions/' + url_infix + '?page='
+    pop_tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7']
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
         "is_authorized":
@@ -27,26 +27,110 @@ def recent_questions(request):
         "page":page,
         "paginator":paginator,
         "active_page":active_page,
-        "tags":
-        tags,
+        "pop_tags":
+        pop_tags,
         "best_members":
         best_members
     }
-    return render(request, 'askme/index.html', context=context)   # django finds templates in 'templates' folder, therefore set path from this folder
-    
-@require_GET
-def tag_questions(request, tag_name):
-    pass
+    return context
 
-def question_page(request, question_id):
-    tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
+@require_GET
+def recent_questions(request):
+    return render(request, 'askme/index.html', context=questions_list(request, Question.objects.recently_asked, 'recent/'))   # django finds templates in 'templates' folder, therefore set path from this folder
+
+# hot_wrapper(Question.objects, Like.objects.hot_questions_ids, hot_questions_ids)
+
+# def hot_wrapper(ModelManager, question_like_stat, quantity=1000):
+#     Question.objects.hot(ModelManager, question_like_stat, quantity_=quantity)
+
+@require_GET
+def hot_questions(request):
+    questions_like_dict = Like.objects.hot_questions_ids(quantity=1000)
+    questions = Question.objects.hot(questions_like_dict)
+    page = paginate(request, questions, per_page=20)
+    paginator, active_page = page.paginator, page.number
+    paginator.base_url=f'/questions/hot/?page='
+    pop_tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7']
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "avatar": "askme/img/avatar.png",
-        "question": Question.objects.get(id=question_id),
-        "tags": tags,
-        "best_members": best_members,
-        "answers": range(5)
+        "is_authorized":
+        True,
+        "user_nickname":
+        "Mr. Pupkins",
+        "profile_icon_url":
+        "askme/img/profile.png",
+        "avatar":
+        "askme/img/avatar.png",
+        "page":page,
+        "paginator":paginator,
+        "active_page":active_page,
+        "pop_tags":
+        pop_tags,
+        "best_members":
+        best_members
+    }
+    return render(request, 'askme/index.html', context=context)
+    #return render(request, 'askme/index.html', context=questions_list(request, hot_wrapper(Question.objects, Like.objects.hot_questions_ids), 'hot/'))
+
+
+@require_GET
+def tag_questions(request, tag_id):
+    tag = Tag.objects.get(id=tag_id) 
+    questions = tag.get_questions()
+    page = paginate(request, questions, per_page=20)
+    paginator, active_page = page.paginator, page.number
+    paginator.base_url='/questions/tag/' + str(tag_id)
+    pop_tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7']
+    best_members = ["pupkin", "petrov", "terminator", "aligator"]
+    context = {
+        "is_authorized":
+        True,
+        "user_nickname":
+        "Mr. Pupkins",
+        "profile_icon_url":
+        "askme/img/profile.png",
+        "avatar":
+        "askme/img/avatar.png",
+        "page":page,
+        "paginator":paginator,
+        "active_page":active_page,
+        "pop_tags":
+        pop_tags,
+        "best_members":
+        best_members,
+        "tag":tag,
+        "questions": questions
+    }
+    return render(request, 'askme/tag_questions.html', context=context)
+
+def question_page(request, question_id):
+    question = Question.objects.get(id=question_id)
+    answers = question.answers
+    print(answers[0].content)
+    page = paginate(request, answers, per_page=30)
+    paginator, active_page = page.paginator, page.number
+    paginator.base_url = '/questions/' + str(question_id)
+    pop_tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
+    best_members = ["pupkin", "petrov", "terminator", "aligator"]
+    context = {
+        "is_authorized":
+        True,
+        "user_nickname":
+        "Mr. Pupkins",
+        "profile_icon_url":
+        "askme/img/profile.png",
+        "avatar":
+        "askme/img/avatar.png",
+        "page":page,
+        "paginator":paginator,
+        "active_page":active_page,
+        "pop_tags":
+        pop_tags,
+        "best_members":
+        best_members,
+        "tag":pop_tags,
+        "question":question,
+        "answers": answers
     }
     return render(request, 'askme/question.html', context=context)
 
@@ -107,7 +191,6 @@ def paginate(request, objects, per_page=20):
     if page_limit > per_page:
        page_limit = per_page
     paginator = Paginator(objects, per_page)
-    paginator.base_url='/questions/?page='
     try:
         page = paginator.get_page(page_num)
     except EmptyPage: # Raised when page() is given a valid value but no objects exist on that page

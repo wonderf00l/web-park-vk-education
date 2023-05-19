@@ -9,7 +9,7 @@
                 <button type="button" class="btn btn-primary arrow">↑</button>
             </div>
             <div class="col-4 rate_box">
-                <button type="button" class="btn btn-primary rate">2</button>
+                <button type="button" class="btn btn-primary rate">{{ question.rate }}</button>
             </div>
             <div class="col-4 arrow-box">
                 <button type="button" class="btn btn-primary arrow">↓</button>
@@ -23,12 +23,12 @@
         <div class="row">{{ question.content|truncatewords:30 }}</div>
         <div class="row">
             <div class="col-4">
-                <a href="#" class="answers_quantity">answer (3)</a>
+                <a href="#" class="answers_quantity">answers ({{ question.answers_quantity }})</a>
             </div>
             <div class="col-8">
                 <span>Tags:</span>
-                {% for tag in tags %}
-                <a href="#">tag 1</a>
+                {% for tag in question.tags %}
+                    <a href="{{ tag.get_url }}">"{{ tag.name }}"</a>
                 {% endfor %}
             </div>
         </div>

@@ -10,7 +10,7 @@
                 <button type="button" class="btn btn-primary arrow">↑</button>
             </div>
             <div class="col-4 rate_box">
-                <button type="button" class="btn btn-primary rate">2</button>
+                <button type="button" class="btn btn-primary rate">{{ answer.rate }}</button>
             </div>
             <div class="col-4 arrow-box">
                 <button type="button" class="btn btn-primary arrow">↓</button>
@@ -19,7 +19,7 @@
     </div>
     <div class="col-10 q_content">
         <div class="row">
-            {{ answer_content }}
+            {{ answer.content|truncatewords:30 }}
         </div>
         <div class="row correct_check_box">
             <div class="form-check">

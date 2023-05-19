@@ -11,7 +11,7 @@
                     <button type="button" class="btn btn-primary arrow">↑</button>
                 </div>
                 <div class="col-4 rate_box">
-                    <button type="button" class="btn btn-primary rate">2</button>
+                    <button type="button" class="btn btn-primary rate">{{ question.rate }}</button>
                 </div>
                 <div class="col-4 arrow-box">
                     <button type="button" class="btn btn-primary arrow">↓</button>
@@ -22,17 +22,18 @@
             <div class="row">
                 <div class="question_name">{{ question.title }}</div>
             </div>
-            <div class="row">{{ question_content|truncatewords:30 }}</div>
+            <div class="row">{{ question.content|truncatewords:30 }}</div>
             <div class="row">
                 <span>Tags:</span>
-                <a href="#">tag 1</a>
-                <a href="#">tag 2</a>
+                {% for tag in question.tags %}
+                    <a href="{{ tag.get_url }}">"{{ tag.name }}"</a>
+                {% endfor %}
             </div>
         </div>
     </div>
     <div class="row answers">
-        {% for answer in answers %}
-            <div class="row answer">{% include "askme/answer_item.html" %}</div>
+        {% for answer_ in answers %}
+            <div class="row answer">{% include "askme/answer_item.html" with answer=answer_ %}</div>
         {% endfor %}
     </div>
     <div class="row answer_form">

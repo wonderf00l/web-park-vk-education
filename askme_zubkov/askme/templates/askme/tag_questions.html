@@ -1,14 +1,7 @@
 {% extends "askme/base.html" %}
 {% block core_content %}
     <div class="row core_content_header">
-        <div class="col-6">
-            <h2 class="main_page_title">New questions</h2>
-        </div>
-        <div class="col-6 hot_questions">
-            <h2>
-                <a href="{% url 'hot_questions' %}">Hot questions</a>
-            </h2>
-        </div>
+        <h2 class="main_page_title">Tag:{{ tag.name }}</h2>
     </div>
     {% for question_ in page.object_list %}
         {% include "askme/question_item.html" with question=question_ %} {%comment%}provide variable to the included html{%endcomment%}
