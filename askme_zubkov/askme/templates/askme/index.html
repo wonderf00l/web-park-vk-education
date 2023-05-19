@@ -1,15 +1,28 @@
 {% extends "askme/base.html" %}
 {% block core_content %}
-    <div class="row core_content_header">
-        <div class="col-6">
-            <h2 class="main_page_title">New questions</h2>
+    {% if 'recent' in paginator.base_url %}
+        <div class="row core_content_header">
+            <div class="col-6">
+                <h2 class="main_page_title">New questions</h2>
+            </div>
+            <div class="col-6 hot_questions">
+                <h2>
+                    <a href="{% url 'hot_questions' %}">Hot questions</a>
+                </h2>
+            </div>
         </div>
-        <div class="col-6 hot_questions">
-            <h2>
-                <a href="{% url 'hot_questions' %}">Hot questions</a>
-            </h2>
+    {% elif 'hot' in paginator.base_url %}
+        <div class="row core_content_header">
+            <div class="col-6">
+                <a href="{% url 'recent_questions' %}"><h2 class="main_page_title">New questions</h2></a>
+            </div>
+            <div class="col-6 hot_questions">
+                <h2>
+                    <span>Hot questions</span>
+                </h2>
+            </div>
         </div>
-    </div>
+    {% endif %}
     {% for question_ in page.object_list %}
         {% include "askme/question_item.html" with question=question_ %} {%comment%}provide variable to the included html{%endcomment%}
     {% endfor %}
