@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from .managers import QuestionManager, LikeManager
+from django.db.models import Sum
 
 class Question(models.Model):
 
@@ -33,7 +34,8 @@ class Question(models.Model):
     
     @property
     def rate(self):
-        return self.rating.count()
+        # return Question.objects.aggregate(Sum('like__reaction')) on field 'like'
+        return self.rating.aggregate(Sum('reaction'))['reaction__sum'] or 0
 
     def get_url(self):
         return reverse('question_page', kwargs={'question_id':self.id})
@@ -55,14 +57,14 @@ class Answer(models.Model):
     content = models.TextField(blank=False)
     author = models.ForeignKey(User, on_delete=models.PROTECT)
     # rating = models.IntegerField(blank=False, null=False, default=0)
-    rating = GenericRelation("Like",related_name='likes', related_query_name="likes")
+    rating = GenericRelation("Like", related_query_name="likes")
     correctness_degree = models.PositiveIntegerField(blank=False, null=False, default=0)
     publication_date = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(Question, on_delete=models.PROTECT)
 
     @property
     def rate(self):
-        return self.rating.count()
+        return self.rating.aggregate(Sum('reaction'))['reaction__sum'] or 0
 
     def __str__(self):
         return self.content
@@ -99,20 +101,21 @@ class Like(models.Model):
     objects = LikeManager()
 
     class Meta:
-        unique_together = ['author', 'content_type', 'object_id']
+        unique_together = ['author', 'content_type', 'object_id', 'reaction'] # 'reaction' добавляем, т.к. пользователь может поставить лайк, затем дизлайк(при этом поля тип сущности, id сущности и автор в этому случае повторяются, однако реакция уже другая), в суммарном рейтинге это будет учтено
 
-    # assessment_type_choices = [
-    #     ("like", "like"),
-    #     ("dislike", "dislike")
-    # ]
-    # type = models.CharField(max_length=4)
+    LIKE_CHOICES = [
+        (1, "like"),
+        (-1, "dislike")
+    ]
+
+    reaction = models.SmallIntegerField(choices=LIKE_CHOICES)
     author = models.ForeignKey(User, on_delete=models.PROTECT)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.RESTRICT)
-    object_id = models.CharField(max_length=50)
+    object_id = models.PositiveIntegerField() # POSITIVE INTEGER
 
-    likes_obj = GenericForeignKey("content_type", "object_id")
-    likes_date = models.DateTimeField(auto_now_add=True)
+    content_object = GenericForeignKey("content_type", "object_id")
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.likes_obj}"
+        return f"{self.content_type} - {self.object_id} -  {self.reaction}"

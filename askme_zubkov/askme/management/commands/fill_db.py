@@ -110,7 +110,7 @@ class Command(BaseCommand):
                 content_type_ = content_types[randint(0, len(content_types) - 1)]
                 obj_id = randint(1, questions_last) if content_type_ == ct_question else randint(
                     1, answers_last)
-                likes.append(Like(content_type=content_type_, object_id=obj_id, author_id=randint(1, profiles_last)))
+                likes.append(Like(reaction=[-1, 1][randint(0, 1)],content_type=content_type_, object_id=obj_id, author_id=randint(1, profiles_last)))
 
             Like.objects.bulk_create(likes, ignore_conflicts=True) # ignore IntegrityError
             

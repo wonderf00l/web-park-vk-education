@@ -38,39 +38,9 @@ def questions_list(request, processor,url_infix):
 def recent_questions(request):
     return render(request, 'askme/index.html', context=questions_list(request, Question.objects.recently_asked, 'recent/'))   # django finds templates in 'templates' folder, therefore set path from this folder
 
-# hot_wrapper(Question.objects, Like.objects.hot_questions_ids, hot_questions_ids)
-
-# def hot_wrapper(ModelManager, question_like_stat, quantity=1000):
-#     Question.objects.hot(ModelManager, question_like_stat, quantity_=quantity)
-
 @require_GET
 def hot_questions(request):
-    questions_like_dict = Like.objects.hot_questions_ids(quantity=1000)
-    questions = Question.objects.hot(questions_like_dict)
-    page = paginate(request, questions, per_page=20)
-    paginator, active_page = page.paginator, page.number
-    paginator.base_url=f'/questions/hot/?page='
-    pop_tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7']
-    best_members = ["pupkin", "petrov", "terminator", "aligator"]
-    context = {
-        "is_authorized":
-        True,
-        "user_nickname":
-        "Mr. Pupkins",
-        "profile_icon_url":
-        "askme/img/profile.png",
-        "avatar":
-        "askme/img/avatar.png",
-        "page":page,
-        "paginator":paginator,
-        "active_page":active_page,
-        "pop_tags":
-        pop_tags,
-        "best_members":
-        best_members
-    }
-    return render(request, 'askme/index.html', context=context)
-    #return render(request, 'askme/index.html', context=questions_list(request, hot_wrapper(Question.objects, Like.objects.hot_questions_ids), 'hot/'))
+    return render(request, 'askme/index.html', context=questions_list(request, Question.objects.hot, 'hot/'))
 
 
 @require_GET
@@ -176,6 +146,7 @@ def settings(request):
         "tags": tags,
         "best_members": best_members
     }
+    Question.objects.annotate
 
     return render(request, 'askme/settings.html', context=context)
 
