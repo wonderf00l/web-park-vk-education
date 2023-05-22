@@ -1,6 +1,9 @@
 from django.core.management.base import BaseCommand
 from askme.models import User, Profile, Question, Answer, Tag, Like
 from faker import Faker
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.utils import timezone
+from django.contrib.auth.hashers import make_password
 from django.contrib.contenttypes.models import ContentType
 from django.db.utils import IntegrityError
 from random import randint
@@ -38,8 +41,8 @@ class Command(BaseCommand):
 
         for i in range(chunks_quantity):
             User.objects.bulk_create([
-                User(username=self.fake.unique.company(),
-                    email=self.fake.unique.company() + self.email_samples[randint(0, len(self.email_samples) - 1)], password=self.fake.name(), last_login=self.fake.date_time())
+                User(username=AbstractBaseUser.normalize_username(self.fake.unique.company()),
+                    email=BaseUserManager.normalize_email(self.fake.unique.company() + self.email_samples[randint(0, len(self.email_samples) - 1)]), password=make_password(self.fake.name(), None, 'md5'), last_login=timezone.now())
                 for j in range(chunk_size)
             ])
 
@@ -85,14 +88,41 @@ class Command(BaseCommand):
                 for j in range(chunk_size)
             ])
 
+    # def create_likes(self, likes_quantity, chunks_quantity=10000):
+
+    #     chunk_size = int(likes_quantity / chunks_quantity)
+
+    #     # types = [
+    #     #     "like",
+    #     #     "dislike"
+    #     # ]
+
+    #     ct_question, ct_answer = ContentType.objects.get_for_model(
+    #         Question), ContentType.objects.get_for_model(Answer)
+    #     content_types = (ct_question, ct_answer)
+
+    #     profiles_last = User.objects.last().id
+    #     questions_last = Question.objects.last().id
+    #     answers_last = Answer.objects.last().id
+
+    #     for i in range(chunks_quantity):
+
+    #         likes = list()
+
+    #         for j in range(chunk_size):
+    #             content_type_ = content_types[randint(0, len(content_types) - 1)]
+    #             obj_id = randint(1, questions_last) if content_type_ == ct_question else randint(
+    #                 1, answers_last)
+    #             likes.append(Like(reaction=[-1, 1][randint(0, 1)],content_type=content_type_, object_id=obj_id, author_id=randint(1, profiles_last)))
+
+    #         Like.objects.bulk_create(likes, ignore_conflicts=True) # ignore IntegrityError
+            
+    #         # if (Assessment.objects.last().id and Assessment.objects.last().id == likes_quantity):
+    #         #     break
+
     def create_likes(self, likes_quantity, chunks_quantity=10000):
 
         chunk_size = int(likes_quantity / chunks_quantity)
-
-        # types = [
-        #     "like",
-        #     "dislike"
-        # ]
 
         ct_question, ct_answer = ContentType.objects.get_for_model(
             Question), ContentType.objects.get_for_model(Answer)
@@ -102,7 +132,9 @@ class Command(BaseCommand):
         questions_last = Question.objects.last().id
         answers_last = Answer.objects.last().id
 
-        for i in range(chunks_quantity):
+        counter = 0
+
+        while(counter != chunks_quantity):
 
             likes = list()
 
@@ -112,11 +144,11 @@ class Command(BaseCommand):
                     1, answers_last)
                 likes.append(Like(reaction=[-1, 1][randint(0, 1)],content_type=content_type_, object_id=obj_id, author_id=randint(1, profiles_last)))
 
-            Like.objects.bulk_create(likes, ignore_conflicts=True) # ignore IntegrityError
-            
-            # if (Assessment.objects.last().id and Assessment.objects.last().id == likes_quantity):
-            #     break
-
+            try:
+                Like.objects.bulk_create(likes)
+                counter += 1
+            except IntegrityError:
+                pass
 
     def create_tags(self, tags_quantity, chunks_quantity=10):
             

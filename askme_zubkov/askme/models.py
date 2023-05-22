@@ -12,7 +12,7 @@ class Question(models.Model):
 
     title = models.CharField(max_length=255, blank=False, null=False, unique=True)
     content = models.TextField(blank=False, null=False)
-    author = models.ForeignKey(User, on_delete=models.PROTECT)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = GenericRelation("Like", related_query_name="likes")
     # rating = models.IntegerField(blank=False, null=False, default=0)
     publication_date = models.DateTimeField(auto_now_add=True)
@@ -55,12 +55,12 @@ class Answer(models.Model):
         ordering = ['id']
 
     content = models.TextField(blank=False)
-    author = models.ForeignKey(User, on_delete=models.PROTECT)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     # rating = models.IntegerField(blank=False, null=False, default=0)
     rating = GenericRelation("Like", related_query_name="likes")
     correctness_degree = models.PositiveIntegerField(blank=False, null=False, default=0)
     publication_date = models.DateTimeField(auto_now_add=True)
-    question = models.ForeignKey(Question, on_delete=models.PROTECT)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     @property
     def rate(self):
@@ -90,8 +90,8 @@ class Profile(models.Model):
     # delattr(AbstractUser, "last_name")
     # User.first_name = None
     # User.last_name = None
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
-    avatar = models.ImageField(upload_to="avatars/", unique=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to="avatars/", null=True)
 
     def __str__(self):
         return self.user.get_username()
@@ -109,7 +109,7 @@ class Like(models.Model):
     ]
 
     reaction = models.SmallIntegerField(choices=LIKE_CHOICES)
-    author = models.ForeignKey(User, on_delete=models.PROTECT)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.RESTRICT)
     object_id = models.PositiveIntegerField() # POSITIVE INTEGER

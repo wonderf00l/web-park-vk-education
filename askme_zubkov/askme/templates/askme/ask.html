@@ -1,12 +1,17 @@
 {% extends "askme/base.html" %}
+{% load bootstrap5 %}
+
 {% block core_content %}
     <h2 class="new_question_title">New Question</h2>
-    <div class="error_message">Potential error msg</div>
-    <div class="row">
-        <div class="col-3">
-            <span>Title</span>
-        </div>
-        <div class="col-9">
+    <form action="{% url 'ask_question' %}" method='post'>
+        {% csrf_token %}
+        {% bootstrap_form question_form %}
+        {% bootstrap_form tag_form %}
+        <button class="btn btn-outline-success" type="submit">Ask</button>
+    </form>
+{% endblock core_content %}
+
+{% comment %} <div class="col-9">
             <div class="mb-3">
                 <textarea class="form-control"
                           id="exampleFormControlTextarea1"
@@ -14,35 +19,4 @@
                           placeholder="Enter the title"
                           required></textarea>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            <span>Text</span>
-        </div>
-        <div class="col-9">
-            <div class="mb-3">
-                <textarea class="form-control"
-                          id="exampleFormControlTextarea1"
-                          rows="3"
-                          placeholder="Enter question content"
-                          required></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            <span>Tags</span>
-        </div>
-        <div class="col-9">
-            <div class="mb-3">
-                <textarea class="form-control"
-                          id="exampleFormControlTextarea1"
-                          rows="3"
-                          placeholder="Add tags"
-                          required></textarea>
-            </div>
-        </div>
-    </div>
-    <button class="btn btn-outline-success" type="submit">Ask</button>
-{% endblock core_content %}
+        </div> {% endcomment %}

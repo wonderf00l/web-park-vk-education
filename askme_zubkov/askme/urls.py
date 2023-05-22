@@ -2,14 +2,16 @@ from django.urls import path
 
 from .views import *
 
+from .url_list import WHITELIST
+
 urlpatterns = [
-    path('', homepage, name='home'),
-    path('questions/recent/', recent_questions, name='recent_questions'),
-    path('questions/hot/', hot_questions, name='hot_questions'),
-    path('questions/<int:question_id>/', question_page, name='question_page'),
-    path('questions/tag/<int:tag_id>/', tag_questions, name='tag_questions'),
-    path('ask/', ask_question, name="ask"),
-    path('login/', login, name='login'),
-    path('register/', register, name='register'),
-    path('settings/', settings, name='settings')
+    path(WHITELIST['home'], homepage, name='home'),
+    path(WHITELIST['recent_questions'], recent_questions, name='recent_questions'),
+    path(WHITELIST['hot_questions'], hot_questions, name='hot_questions'),
+    path(WHITELIST['question_page'], question_page, name='question_page'),
+    path(WHITELIST['tag_questions'], tag_questions, name='tag_questions'),
+    path(WHITELIST['ask_question'], ask_question, name="ask_question"),
+    path(WHITELIST['login'], login, name='login'),
+    path(WHITELIST['register'], register, name='register'),
+    path(WHITELIST['settings'], settings, name='settings')
 ]

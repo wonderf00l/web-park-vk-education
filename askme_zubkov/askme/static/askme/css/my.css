@@ -218,3 +218,7 @@
     margin-top: 10px;
     margin-bottom: 20px; 
 }
+
+.btn.btn-primary.reg_button {
+    margin-bottom: 25px;
+}
