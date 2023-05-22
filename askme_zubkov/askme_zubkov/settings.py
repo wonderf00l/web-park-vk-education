@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-xu7xp0u8a%!)94_c+a@4e4l5&(zd12l$f36=jblec0ax2okpxq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-LOGIN_URL = 'login/'
+LOGIN_URL = '/login/' # не забываем слеш - иначе url берется относителньо текущего документа, т.е. итоговый url: /ask/login/continue=/ask/ - invalid
 
 ALLOWED_HOSTS = []
 

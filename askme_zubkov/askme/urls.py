@@ -12,6 +12,7 @@ urlpatterns = [
     path(WHITELIST['tag_questions'], tag_questions, name='tag_questions'),
     path(WHITELIST['ask_question'], ask_question, name="ask_question"),
     path(WHITELIST['login'], login, name='login'),
+    path(WHITELIST['logout'], logout, name='logout'),
     path(WHITELIST['register'], register, name='register'),
     path(WHITELIST['settings'], settings, name='settings')
 ]

@@ -8,7 +8,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <link rel="icon" href="{% static 'askme/img/title.png' %}" alt="icon">
-        <title>{{ AskMe }}</title>
+        <title>Askme</title>
         <!-- Bootstrap core CSS -->
         <link href="{% static 'askme/css/bootstrap.css' %}" rel="stylesheet">
         <!-- Custom styles for this template -->
@@ -41,8 +41,8 @@
                                 </div>
                                 <div class="col-6">
                                     {% block userblock %}
-                                        {% if is_authorized == True %}
-                                            {% include "askme/authorized.html" %}
+                                        {% if user.is_authenticated %}
+                                            {% include "askme/authorized.html" with user_=user %}
                                         {% else %}
                                             {% include "askme/unauthorized.html" %}
                                         {% endif %}

@@ -5,11 +5,19 @@
     {% block title %}
         <h2 class="account_title">Register</h2>
     {% endblock title %}
+    <a href="{% url 'login' %}" class="reg_link">I have an account</a>
     <form action="{% url 'register' %}" method="post" novalidate>
         {% csrf_token %}
         {% bootstrap_form register_form %}
         <button type="submit" class="btn btn-primary reg_button">Register</button>
     </form>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock core_content %}
 
 {% comment %} class="register_form" novalidate         {% bootstrap_form register_form %}

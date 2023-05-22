@@ -1,11 +1,15 @@
 from .url_list import WHITELIST
 from django.shortcuts import render, redirect
 from django.http import HttpResponsePermanentRedirect, Http404
-from django.db import IntegrityError
+from django.contrib import messages
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
 from django.views.decorators.http import require_GET
 from .models import *
 from .forms import *
+
+# add login_required
 
 @require_GET
 def homepage(request):
@@ -19,14 +23,9 @@ def questions_list(request, processor,url_infix):
     pop_tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7']
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "is_authorized":
-        True,
-        "user_nickname":
-        "Mr. Pupkins",
+        "user": request.user,
         "profile_icon_url":
         "askme/img/profile.png",
-        "avatar":
-        "askme/img/avatar.png",
         "page":page,
         "paginator":paginator,
         "active_page":active_page,
@@ -106,7 +105,7 @@ def question_page(request, question_id):
     }
     return render(request, 'askme/question.html', context=context)
 
-
+@login_required(redirect_field_name='continue')
 def ask_question(request): # questionfrom.save() override
 
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
@@ -130,6 +129,8 @@ def ask_question(request): # questionfrom.save() override
     # check data for unuqueness
     context = {
         "tags": tags,
+        "profile_icon_url":
+        "askme/img/profile.png",
         "best_members": best_members,
         "question_form":question_form,
         "tag_form":tag_form
@@ -146,7 +147,8 @@ def register(request):
         if register_form.is_valid():
             user_ = register_form.save()
             Profile.objects.create(avatar=register_form.cleaned_data.get('avatar'), user=user_)
-            login(request, user_)
+            # messages.success(request, 'Successful register')
+            auth.login(request, user_)
             return redirect('home')
     else:
         register_form = UserRegisterForm()
@@ -164,11 +166,13 @@ def register(request):
 def login(request): # check 'continue'
 
     if request.method == 'POST':
-        redirect_path = request.GET.get('continue') if request.GET.get('continue') in WHITELIST.values() else WHITELIST['home']
-        print(redirect_path)
-        login_form = AuthenticationForm(request.POST) 
+        redirect_path = '/' + request.GET.get('continue') if request.GET.get('continue') in WHITELIST.values() else '/' + WHITELIST['recent_questions'] # проверка урла, если пришли из login_required, в случае самостоятельной авторизации get параметр - None('') --> выпадет дефолтный home('')
+        print(f'redirect_path: {redirect_path}')
+        login_form = AuthenticationForm(request, request.POST) # request.POST only if custom subclass
+        print(login_form.__dict__) 
         if login_form.is_valid(): # authenticate() inside clean() which is triggered by is_valid() (or form.errors)
-            login(request, login_form.get_user()) # session creation inside this method
+            auth.login(request, login_form.get_user()) # session creation inside this method
+            # messages.success(request, 'Successful log in')
             print(login_form.get_user().__dict__)
             return redirect(redirect_path)
         print('INVALID LOGIN')
@@ -185,26 +189,33 @@ def login(request): # check 'continue'
 
     return render(request, 'askme/login.html', context=context)
 
+@login_required(redirect_field_name='continue')
+def logout(request):
+    auth.logout(request)
+    # messages.success(request, "Log out successfully")
+    return redirect('recent_questions')
 
-    tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
-    best_members = ["pupkin", "petrov", "terminator", "aligator"]
-    context = {
-        "tags": tags,
-        "best_members": best_members
-    }
-    print(request.POST)
-    return render(request, 'askme/login.html', context=context)
-
-
+@login_required(redirect_field_name='continue') # user?
 def settings(request):
+
+    if request.method == 'POST':
+        settings_form = UserSettingsForm(request.POST)
+        if settings_form.is_valid():
+            print("VALID")
+            settings_form.save()
+            print("SEUCCES SETTINGS")
+            return redirect(request, 'settings')
+        print("NOT VALID")
+    elif request.method == 'GET':
+        settings_form = UserSettingsForm()
+
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "account_name": "Chris Buck",
+        
         "tags": tags,
         "best_members": best_members
     }
-    Question.objects.annotate
 
     return render(request, 'askme/settings.html', context=context)
 

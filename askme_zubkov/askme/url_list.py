@@ -6,6 +6,7 @@ WHITELIST = {
     'tag_questions': 'questions/tag/<int:tag_id>/',
     'ask_question': 'ask/',
     'login': 'login/',
+    'logout': 'logout/',
     'register': 'register/',
-    'settings': 'settings'
+    'settings': 'profile/edit/'
 }

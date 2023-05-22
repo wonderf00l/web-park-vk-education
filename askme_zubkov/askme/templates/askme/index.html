@@ -1,5 +1,12 @@
 {% extends "askme/base.html" %}
 {% block core_content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     {% if 'recent' in paginator.base_url %}
         <div class="row core_content_header">
             <div class="col-6">

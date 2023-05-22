@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, SetPasswordForm
+from django.core.exceptions import ValidationError
 from .models import *
 
 
@@ -32,16 +33,23 @@ class UserRegisterForm(UserCreationForm): # Profile creation in UserChangeForm (
 
     avatar = forms.ImageField(required=False, allow_empty_file=True)
 
+
+
+class UserSettingsForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        fields = ('username', 'email', 'first_name', 'last_name')
+
+    avatar = forms.ImageField(required=False, allow_empty_file=True)
+
     def save(self, commit=True):
-        user = super().save(commit=False)
-        user.id = User.objects.last().id + 1
-        user.save()
+        super().save(commit=False)
+        user = User.objects.filter(username=self.cleaned_data['username'])
+        if user.update(**self.cleaned_data):
+            user.profile.avatar = self.cleaned_data['avatar']
+            user.profile.save()
+        else:
+            raise ValidationError
         return user
-
-
-
-
-
 
 
 
