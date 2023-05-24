@@ -6,7 +6,6 @@
     <form action="{% url 'ask_question' %}" method='post'>
         {% csrf_token %}
         {% bootstrap_form question_form %}
-        {% bootstrap_form tag_form %}
         <button class="btn btn-outline-success" type="submit">Ask</button>
     </form>
 {% endblock core_content %}

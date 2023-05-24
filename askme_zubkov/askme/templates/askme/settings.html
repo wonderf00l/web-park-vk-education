@@ -1,15 +1,17 @@
-{% extends "askme/register.html" %}
+{% extends "askme/base.html" %}
+{% load bootstrap5 %}
 {% load static %}
-{% block title %}
-    <h2 class="account_title">{{ account_name }}: settings</h2>
-{% endblock title %}
-{% block forms_content %}
-    <div class="mb-3">
-        <label for="formFile" class="form-label">Upload avatar</label>
-        <div class="row avatar_box">
-            <img class="avatar" src="{% static 'askme/img/avatar.png' %}" alt="avatar">
-        </div>
-        <input class="form-control" type="file" id="formFile">
+
+{% block core_content %}
+    {% block title %}
+    <h2 class="account_title">{{ user.username }}: settings</h2>
+    {% endblock title %}
+    <form action="{% url 'settings' %}" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {% bootstrap_form settings_form %}
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <div class="row avatar_box">
+        <img class="avatar" src="{{ request.user.profile.avatar.url }}" alt="avatar">
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-{% endblock forms_content %}
+{% endblock core_content %}

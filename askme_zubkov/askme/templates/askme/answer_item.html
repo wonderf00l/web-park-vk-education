@@ -3,7 +3,7 @@
 <div class="row answer_box">
     <div class="col-2 avatar_box_outer">
         <div class="row avatar_box">
-            <img class="avatar" src="{% static 'askme/img/avatar.png' %}" alt="avatar img">
+            <img class="avatar" src="{{ answer.author.profile.avatar.url }}" alt="avatar img">
         </div>
         <div class="row">
             <div class="col-4 arrow-box">

@@ -1,4 +1,4 @@
-{% load static %}
+{% comment %} {% load static %} {% endcomment %}
 <div class="row">
     <div class="col-6">
         <div class="row box1">
@@ -11,7 +11,7 @@
             </div>
             <div class="col-9 box3">
                 <div class="img box">
-                    <img class="profile_icon" src="{% static profile_icon_url %}" alt="profile_icon">
+                    <img class="profile_icon" src="{{ user_.profile.avatar.url }}" alt="profile_icon">
                     {% comment %}src="{% static profile_icon_url %}" profile.avatar {% endcomment %}
                 </div>
             </div>

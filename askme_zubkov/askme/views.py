@@ -6,10 +6,9 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
 from django.views.decorators.http import require_GET
+from django.forms.models import model_to_dict
 from .models import *
 from .forms import *
-
-# add login_required
 
 @require_GET
 def homepage(request):
@@ -106,34 +105,25 @@ def question_page(request, question_id):
     return render(request, 'askme/question.html', context=context)
 
 @login_required(redirect_field_name='continue')
-def ask_question(request): # questionfrom.save() override
+def ask_question(request):
 
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
 
     if request.method == 'POST':
-        question_form = AddQuestionForm(request.POST)
-        tag_form = AddTagForm(request.POST) # title tag in form
-        if question_form.is_valid() and tag_form.is_valid():
-            new_question = question_form.save()
-            try:
-                tag_attrs = tag_form.cleaned_data.update({'author_id': new_question.id})
-                Tag.objects.create(**tag_form.cleaned_data)
-                return redirect(reverse('question_page', kwargs={'question_id':new_question.id}))
-            except ValueError:
-                print("ALREADY PRESENTED")
-            # try: add tag -- exc: IntegrityError: already presented
+        question_form = AddQuestionForm(request.POST, request.user)
+        if question_form.is_valid():
+            new_question = question_form.save(request.user)
+            return redirect(reverse('question_page', kwargs={'question_id':new_question.id}))
     elif request.method == 'GET':
         question_form = AddQuestionForm()
-        tag_form = AddTagForm()
     # check data for unuqueness
     context = {
-        "tags": tags,
+        "pop_tags": tags,
         "profile_icon_url":
         "askme/img/profile.png",
         "best_members": best_members,
         "question_form":question_form,
-        "tag_form":tag_form
     }
 
     # берем данные юзера - смотрим id сессии -- получаем логин -- идем по логину в бд и вытаскиваем оттуда инстанс юзера -- потом его присвоем полю author нового вопроса, тегу присвоим новый созданный вопрос
@@ -143,12 +133,13 @@ def ask_question(request): # questionfrom.save() override
 def register(request):
 
     if request.method == 'POST':
-        register_form = UserRegisterForm(request.POST)
+        register_form = UserRegisterForm(request.POST, request.FILES)
         if register_form.is_valid():
             user_ = register_form.save()
-            Profile.objects.create(avatar=register_form.cleaned_data.get('avatar'), user=user_)
             # messages.success(request, 'Successful register')
             auth.login(request, user_)
+            print(f"AVATAR URL: {user_.profile.avatar.url}") # ТА ЖЕ ОШИБКА С request.user.profile.avatar.url, хотя авторизация проходит успешно
+
             return redirect('home')
     else:
         register_form = UserRegisterForm()
@@ -163,57 +154,53 @@ def register(request):
 
     return render(request, 'askme/register.html', context=context)
 
+
 def login(request): # check 'continue'
 
-    if request.method == 'POST':
-        redirect_path = '/' + request.GET.get('continue') if request.GET.get('continue') in WHITELIST.values() else '/' + WHITELIST['recent_questions'] # проверка урла, если пришли из login_required, в случае самостоятельной авторизации get параметр - None('') --> выпадет дефолтный home('')
-        print(f'redirect_path: {redirect_path}')
+    if request.method == 'GET':
+        login.url = request.GET.get('continue')
+        login_form = AuthenticationForm()
+    elif request.method == 'POST':
+        redirect_path = login.url if login.url.lstrip('/') in WHITELIST.values() else '/' + WHITELIST['recent_questions'] # проверка урла, если пришли из login_required, в случае самостоятельной авторизации get параметр - None('') --> выпадет дефолтный home('')
         login_form = AuthenticationForm(request, request.POST) # request.POST only if custom subclass
-        print(login_form.__dict__) 
         if login_form.is_valid(): # authenticate() inside clean() which is triggered by is_valid() (or form.errors)
             auth.login(request, login_form.get_user()) # session creation inside this method
-            # messages.success(request, 'Successful log in')
-            print(login_form.get_user().__dict__)
-            return redirect(redirect_path)
-        print('INVALID LOGIN')
-    elif request.method == 'GET':
-        login_form = AuthenticationForm()
+            login.url = ''
+            return redirect(redirect_path)        
 
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "tags": tags,
+        "pop_tags": tags,
         "best_members": best_members,
         "login_form": login_form
     }
 
     return render(request, 'askme/login.html', context=context)
 
-@login_required(redirect_field_name='continue')
+@login_required(redirect_field_name='continue') # .../&continue=урл страницы, куда login_required
 def logout(request):
     auth.logout(request)
     # messages.success(request, "Log out successfully")
     return redirect('recent_questions')
 
-@login_required(redirect_field_name='continue') # user?
+@login_required(redirect_field_name='continue')
 def settings(request):
 
     if request.method == 'POST':
-        settings_form = UserSettingsForm(request.POST)
+        settings_form = UserSettingsForm(data=request.POST, files=request.FILES, instance=request.user)
         if settings_form.is_valid():
-            print("VALID")
             settings_form.save()
-            print("SEUCCES SETTINGS")
-            return redirect(request, 'settings')
+            return redirect('settings')
         print("NOT VALID")
     elif request.method == 'GET':
-        settings_form = UserSettingsForm()
+        settings_form = UserSettingsForm(initial=model_to_dict(request.user))
 
     tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        
-        "tags": tags,
+        "settings_form": settings_form,
+        "pop_tags": tags,
         "best_members": best_members
     }
 

@@ -41,8 +41,8 @@
                                 </div>
                                 <div class="col-6">
                                     {% block userblock %}
-                                        {% if user.is_authenticated %}
-                                            {% include "askme/authorized.html" with user_=user %}
+                                        {% if request.user.is_authenticated %}
+                                            {% include "askme/authorized.html" with user_=request.user %}
                                         {% else %}
                                             {% include "askme/unauthorized.html" %}
                                         {% endif %}

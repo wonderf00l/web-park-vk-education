@@ -6,7 +6,7 @@
         <h2 class="account_title">Register</h2>
     {% endblock title %}
     <a href="{% url 'login' %}" class="reg_link">I have an account</a>
-    <form action="{% url 'register' %}" method="post" novalidate>
+    <form action="{% url 'register' %}" method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         {% bootstrap_form register_form %}
         <button type="submit" class="btn btn-primary reg_button">Register</button>

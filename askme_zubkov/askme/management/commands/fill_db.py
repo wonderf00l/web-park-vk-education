@@ -50,7 +50,7 @@ class Command(BaseCommand):
 
         for i in range(chunks_quantity):
             Profile.objects.bulk_create([
-                Profile(avatar=self.img_url_prefix + str(offset + j + 1), user_id=offset + j + 1)
+                Profile(user_id=offset + j + 1)
                 for j in range(chunk_size)
             ])
             offset += chunk_size

@@ -85,13 +85,9 @@ class Tag(models.Model):
 
 
 class Profile(models.Model):
-
-    # delattr(AbstractUser, "first_name")
-    # delattr(AbstractUser, "last_name")
-    # User.first_name = None
-    # User.last_name = None
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(upload_to="avatars/", null=True)
+    avatar = models.ImageField(upload_to="avatars/%Y/%m/%d/", blank=True, null=True, default='default_avatar.png') # default относительно media/ folder(MEDIA_URL)
 
     def __str__(self):
         return self.user.get_username()

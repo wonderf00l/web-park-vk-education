@@ -151,6 +151,6 @@ STATICFILES_DIRS = [] # список доп(нестандратных) путе
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/media/' # префикс для картинок с точки зрения урла на сайте
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # соответствует каталогу, в который кладутся media-файлы

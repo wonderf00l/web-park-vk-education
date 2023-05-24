@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings as settings_
 
 from .views import *
 
@@ -16,3 +18,6 @@ urlpatterns = [
     path(WHITELIST['register'], register, name='register'),
     path(WHITELIST['settings'], settings, name='settings')
 ]
+
+if settings_.DEBUG: # раздача медиа в дебаг-режиме(уже будет доступна по урлу localhost/.../img.png)
+    urlpatterns += static(settings_.MEDIA_URL, document_root=settings_.MEDIA_ROOT)
