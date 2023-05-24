@@ -50,7 +50,19 @@ class AddQuestionForm(forms.ModelForm):
 
         return question
 
+class AddAnswerForm(forms.ModelForm):
 
+    class Meta:
+        model = Answer
+        fields = ['content']
+
+    def save(self,question,author,commit=True):
+        answer = super().save(commit=False)
+        answer.question = question
+        answer.author = author
+        answer.save()
+        return answer
+    
 
 class UserRegisterForm(UserCreationForm): # поля паролей и валидация у родителя
 

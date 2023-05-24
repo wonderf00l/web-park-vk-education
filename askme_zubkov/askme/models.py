@@ -49,7 +49,7 @@ class Answer(models.Model):
     class Meta:
         ordering = ['id']
 
-    content = models.TextField(blank=False)
+    content = models.TextField(blank=False, null=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = GenericRelation("Like", related_query_name="likes")
     correctness_degree = models.SmallIntegerField(blank=False, null=False, default=0)

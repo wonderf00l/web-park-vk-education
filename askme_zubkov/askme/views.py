@@ -75,6 +75,15 @@ def tag_questions(request, tag_id):
     return render(request, 'askme/tag_questions.html', context=context)
 
 def question_page(request, question_id):
+
+    if request.method == 'POST':
+        answer_form = AddAnswerForm(data=request.POST)
+        if answer_form.is_valid():
+            question = Question.objects.get(id=question_id)
+            answer_form.save(question, request.user)
+            return redirect(request.path)
+
+    answer_form = AddAnswerForm()
     question = Question.objects.get(id=question_id)
     answers = question.answers
     page = paginate(request, answers, per_page=30)
@@ -83,14 +92,6 @@ def question_page(request, question_id):
     pop_tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "is_authorized":
-        True,
-        "user_nickname":
-        "Mr. Pupkins",
-        "profile_icon_url":
-        "askme/img/profile.png",
-        "avatar":
-        "askme/img/avatar.png",
         "page":page,
         "paginator":paginator,
         "active_page":active_page,
@@ -98,9 +99,9 @@ def question_page(request, question_id):
         pop_tags,
         "best_members":
         best_members,
-        "tag":pop_tags,
         "question":question,
-        "answers": answers
+        "answers": answers,
+        "answer_form": answer_form
     }
     return render(request, 'askme/question.html', context=context)
 
