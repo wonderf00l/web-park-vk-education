@@ -46,19 +46,13 @@ class Question(models.Model):
 
 class Answer(models.Model):
 
-    # question_states = [
-    #     ("CR", "Correct"),
-    #     ("NS", "Not stated"),
-    # ]
-
     class Meta:
         ordering = ['id']
 
     content = models.TextField(blank=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    # rating = models.IntegerField(blank=False, null=False, default=0)
     rating = GenericRelation("Like", related_query_name="likes")
-    correctness_degree = models.PositiveIntegerField(blank=False, null=False, default=0)
+    correctness_degree = models.SmallIntegerField(blank=False, null=False, default=0)
     publication_date = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
@@ -85,7 +79,7 @@ class Tag(models.Model):
 
 
 class Profile(models.Model):
-    
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to="avatars/%Y/%m/%d/", blank=True, null=True, default='default_avatar.png') # default относительно media/ folder(MEDIA_URL)
 
