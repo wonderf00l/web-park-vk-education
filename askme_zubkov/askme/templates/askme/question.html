@@ -38,9 +38,11 @@
             <div class="row answer">{% include "askme/answer_item.html" with answer=answer_ %}</div>
         {% endfor %}
     </div>
-    <form action="{{ question.get_url }}" method='post'>
-        {% csrf_token %}
-        {% bootstrap_form answer_form %}
-        <button class="btn btn-outline-success" type="submit">Answer</button>
-    </form>
+    {% if request.user != question.author %}
+        <form action="{{ question.get_url }}" method='post'>
+            {% csrf_token %}
+            {% bootstrap_form answer_form %}
+            <button class="btn btn-outline-success" type="submit">Answer</button>
+        </form>
+    {% endif %}
 {% endblock core_content %}

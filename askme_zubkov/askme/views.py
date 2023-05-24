@@ -1,7 +1,6 @@
 from .url_list import WHITELIST
 from django.shortcuts import render, redirect
 from django.http import HttpResponsePermanentRedirect, Http404
-from django.contrib import messages
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage
@@ -54,14 +53,6 @@ def tag_questions(request, tag_id):
     pop_tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7']
     best_members = ["pupkin", "petrov", "terminator", "aligator"]
     context = {
-        "is_authorized":
-        True,
-        "user_nickname":
-        "Mr. Pupkins",
-        "profile_icon_url":
-        "askme/img/profile.png",
-        "avatar":
-        "askme/img/avatar.png",
         "page":page,
         "paginator":paginator,
         "active_page":active_page,
@@ -118,7 +109,6 @@ def ask_question(request):
             return redirect(reverse('question_page', kwargs={'question_id':new_question.id}))
     elif request.method == 'GET':
         question_form = AddQuestionForm()
-    # check data for unuqueness
     context = {
         "pop_tags": tags,
         "profile_icon_url":
@@ -126,8 +116,6 @@ def ask_question(request):
         "best_members": best_members,
         "question_form":question_form,
     }
-
-    # берем данные юзера - смотрим id сессии -- получаем логин -- идем по логину в бд и вытаскиваем оттуда инстанс юзера -- потом его присвоем полю author нового вопроса, тегу присвоим новый созданный вопрос
 
     return render(request, 'askme/ask.html', context=context)
 
@@ -162,7 +150,7 @@ def login(request): # check 'continue'
         login.url = request.GET.get('continue')
         login_form = AuthenticationForm()
     elif request.method == 'POST':
-        redirect_path = login.url if login.url.lstrip('/') in WHITELIST.values() else '/' + WHITELIST['recent_questions'] # проверка урла, если пришли из login_required, в случае самостоятельной авторизации get параметр - None('') --> выпадет дефолтный home('')
+        redirect_path = login.url if login.url and login.url[1:] in WHITELIST.values() else '/' + WHITELIST['recent_questions'] # проверка урла, если пришли из login_required, в случае самостоятельной авторизации get параметр - None('') --> выпадет дефолтный home('')
         login_form = AuthenticationForm(request, request.POST) # request.POST only if custom subclass
         if login_form.is_valid(): # authenticate() inside clean() which is triggered by is_valid() (or form.errors)
             auth.login(request, login_form.get_user()) # session creation inside this method
