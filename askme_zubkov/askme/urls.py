@@ -4,19 +4,19 @@ from django.conf import settings as settings_
 
 from .views import *
 
-from .url_list import WHITELIST
-
 urlpatterns = [
-    path(WHITELIST['home'], homepage, name='home'),
-    path(WHITELIST['recent_questions'], recent_questions, name='recent_questions'),
-    path(WHITELIST['hot_questions'], hot_questions, name='hot_questions'),
-    path(WHITELIST['question_page'], question_page, name='question_page'),
-    path(WHITELIST['tag_questions'], tag_questions, name='tag_questions'),
-    path(WHITELIST['ask_question'], ask_question, name="ask_question"),
-    path(WHITELIST['login'], login, name='login'),
-    path(WHITELIST['logout'], logout, name='logout'),
-    path(WHITELIST['register'], register, name='register'),
-    path(WHITELIST['settings'], settings, name='settings')
+    path('', homepage, name='home'),
+    path('questions/recent/', recent_questions, name='recent_questions'),
+    path('questions/hot/', hot_questions, name='hot_questions'),
+    path('questions/<int:question_id>/', question_page, name='question_page'),
+    path('questions/tag/<int:tag_id>/', tag_questions, name='tag_questions'),
+    path('ask/', ask_question, name="ask_question"),
+    path('login/', login, name='login'),
+    path('logout/', logout, name='logout'),
+    path('register/', register, name='register'),
+    path('profile/edit/', settings, name='settings'),
+    path('question/react/', question_react, name='question_react'),
+    path('answer/react/', answer_react, name='answer_react'),
 ]
 
 if settings_.DEBUG: # раздача медиа в дебаг-режиме(уже будет доступна по урлу localhost/.../img.png)

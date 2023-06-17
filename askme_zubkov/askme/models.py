@@ -5,8 +5,16 @@ from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKe
 from django.contrib.contenttypes.models import ContentType
 from .managers import QuestionManager, LikeManager
 from django.db.models import Sum
+# from django.db.models.signals import post_init
 
 class Question(models.Model):
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     current_user = None
+
+    # current_user = None либо атрибут класса --> переменная, разделяемая всеми инстансами --> при каждом запросе от любого из юзеров она будет перезаписываться
+    # альтернатива: проставлять атрибут явно у ИНСТАНСОВ, либо же формировать массив реакций и прокидывать в контекст
 
     objects = QuestionManager()
 
@@ -37,19 +45,35 @@ class Question(models.Model):
         # return Question.objects.aggregate(Sum('like__reaction')) on field 'like'
         return self.rating.aggregate(Sum('reaction'))['reaction__sum'] or 0
 
+    current_user = None
+
+    # @property
+    # def user_reaction(self, author_=[None]):
+    #     author_[0] = self.current_user
+    #     try:
+    #         return self.rating.get(author=author_[0]).reaction # -1 0 1
+    #     except Like.DoesNotExist:
+    #         return 0
+
     def get_url(self):
         return reverse('question_page', kwargs={'question_id':self.id})
 
     def __str__(self):
         return self.title
 
+# def add_curr_user_to_question(user, **kwargs):
+#     print(kwargs)
+#     instance = kwargs.get('instance')
+#     instance.current_user = user
+
+# post_init.connect(add_curr_user_to_question, Question)
+
 
 class Answer(models.Model):
 
-    class Meta:
-        ordering = ['id']
+    current_user = None
 
-    content = models.TextField(blank=False, null=False)
+    content = models.TextField(blank=False, null=False, max_length=255)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = GenericRelation("Like", related_query_name="likes")
     correctness_degree = models.SmallIntegerField(blank=False, null=False, default=0)
@@ -59,6 +83,14 @@ class Answer(models.Model):
     @property
     def rate(self):
         return self.rating.aggregate(Sum('reaction'))['reaction__sum'] or 0
+
+    # @property
+    # def user_reaction(self, author_=current_user):
+    #     try:
+    #         react = self.rating.get(author=author_).reaction # -1 0 1
+    #         return react
+    #     except Like.DoesNotExist:
+    #         return 0
 
     def __str__(self):
         return self.content
@@ -85,20 +117,26 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.get_username()
+    
+    # def question_reaction(self, question_id):
+    #     return self.user.question_set.all()[question_id]
+    
+    # def answer_reaction(self, answer_id):
+    #     return self.user.answer_set.all()[answer_id]
 
 class Like(models.Model):
 
     objects = LikeManager()
 
     class Meta:
-        unique_together = ['author', 'content_type', 'object_id', 'reaction'] # 'reaction' добавляем, т.к. пользователь может поставить лайк, затем дизлайк(при этом поля тип сущности, id сущности и автор в этому случае повторяются, однако реакция уже другая), в суммарном рейтинге это будет учтено
+        unique_together = ['author', 'content_type', 'object_id']
 
     LIKE_CHOICES = [
         (1, "like"),
         (-1, "dislike")
     ]
 
-    reaction = models.SmallIntegerField(choices=LIKE_CHOICES)
+    reaction = models.SmallIntegerField(choices=LIKE_CHOICES, blank=False, null=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.RESTRICT)

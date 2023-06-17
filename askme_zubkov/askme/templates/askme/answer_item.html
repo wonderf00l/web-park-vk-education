@@ -5,17 +5,7 @@
         <div class="row avatar_box">
             <img class="avatar" src="{{ answer.author.profile.avatar.url }}" alt="avatar img">
         </div>
-        <div class="row">
-            <div class="col-4 arrow-box">
-                <button type="button" class="btn btn-primary arrow">↑</button>
-            </div>
-            <div class="col-4 rate_box">
-                <button type="button" class="btn btn-primary rate">{{ answer.rate }}</button>
-            </div>
-            <div class="col-4 arrow-box">
-                <button type="button" class="btn btn-primary arrow">↓</button>
-            </div>
-        </div>
+        {% include "askme/rate_counter.html" with obj_type='answer' obj=answer %}
     </div>
     <div class="col-10 q_content">
         <div class="row">

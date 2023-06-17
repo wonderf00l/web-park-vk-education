@@ -12,8 +12,9 @@ from django.db.models import Sum
 
 
 class ProfileManager(models.Manager):
-    def reset_rating(self):
-        pass  # check with auth
+    # def get_reaction(self, obj, obj_id):
+    #     return self
+    pass
 
 
 class QuestionManager(models.Manager):

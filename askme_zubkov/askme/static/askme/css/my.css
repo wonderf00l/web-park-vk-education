@@ -107,16 +107,35 @@
     padding: 0;
 }
 
-.btn.btn-primary.arrow {
+.btn.btn-primary.arrow.like {
     width: 70%;
     height: 70%;
     padding: 0;
 }
 
+.btn.btn-primary.arrow.dislike {
+    width: 70%;
+    height: 70%;
+    padding: 0;
+}
+
+/* .btn.btn-primary.arrow.non-active {
+    width: 70%;
+    height: 70%;
+    padding: 0;
+    background: gray;
+    cursor: default;
+} */
+
 .btn.btn-primary.rate {
     width: 70%;
     height: 70%;
     padding: 0;
+}
+
+*:disabled {
+    background-color: gray;
+    cursor: default;
 }
 
 .row.question_item {
