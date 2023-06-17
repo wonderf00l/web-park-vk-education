@@ -3,7 +3,7 @@
 {% load bootstrap5 %}
 
 {% block core_content %}
-    <div class="row question_to_answer">
+    <div class="row question_to_answer" data-id={{ question.id }}>
         <div class="col-2 avatar_box_outer">
             <div class="row avatar_box">
                 <img class="avatar" src="{{ question.author.profile.avatar.url }}" alt="avatar">
@@ -25,7 +25,7 @@
     </div>
     <div class="row answers">
         {% for answer_ in answers %}
-            <div class="row answer">{% include "askme/answer_item.html" with answer=answer_ %}</div>
+            {% include "askme/answer_item.html" with answer=answer_ %}
         {% endfor %}
     </div>
     {% if request.user != question.author %}

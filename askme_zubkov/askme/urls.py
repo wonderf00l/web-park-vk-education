@@ -17,7 +17,8 @@ urlpatterns = [
     path('profile/edit/', settings, name='settings'),
     path('question/react/', question_react, name='question_react'),
     path('answer/react/', answer_react, name='answer_react'),
-]
+    path('answer/correct/', check_answer, name='check_answer'),
+]   
 
 if settings_.DEBUG: # раздача медиа в дебаг-режиме(уже будет доступна по урлу localhost/.../img.png)
     urlpatterns += static(settings_.MEDIA_URL, document_root=settings_.MEDIA_ROOT)

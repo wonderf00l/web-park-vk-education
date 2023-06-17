@@ -273,7 +273,7 @@ def question_react(request):
 
 @require_POST
 def answer_react(request):
-    
+
     if not request.user.is_authenticated:
         return HttpResponse('Unauthorized', status=401)
 
@@ -304,6 +304,30 @@ def answer_react(request):
         'user_rating': answer.current_reaction, # -1 0 1
         'total_rating': answer.rate
     })
+
+@require_POST
+def check_answer(request):
+    
+    if not request.user.is_authenticated:
+        return HttpResponse('Unauthorized', status=401)
+
+    try:
+        answer_id = request.POST.get('answer_id')
+        question_id = request.POST.get('question_id')
+        if not answer_id or not question_id:
+            raise BadRequest
+        answer = Answer.objects.get(id=answer_id, question_id=question_id)
+    except (BadRequest, Answer.DoesNotExist):
+        return HttpResponseBadRequest()
+    
+    answer.is_correct = not answer.is_correct
+    answer.save()
+
+    return JsonResponse({
+        'status': 'ok',
+        'is_correct': answer.is_correct,
+    })
+    # снятие чекбокса - отпрвка is_correct = -1 --> снятие/простановка бокса - 2 разных события
 
 def some_view(request):
     if request.method == 'POST':

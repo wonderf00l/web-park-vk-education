@@ -76,7 +76,7 @@ class Answer(models.Model):
     content = models.TextField(blank=False, null=False, max_length=255)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = GenericRelation("Like", related_query_name="likes")
-    correctness_degree = models.SmallIntegerField(blank=False, null=False, default=0)
+    is_correct = models.BooleanField(blank=False, null=False, default=False)
     publication_date = models.DateTimeField(auto_now_add=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 

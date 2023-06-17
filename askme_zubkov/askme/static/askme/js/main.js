@@ -128,3 +128,30 @@ $(".btn.btn-primary.arrow.answer.dislike").on("click", function (ev) {
         }
     })
 });
+
+
+if ($(this).is(":checked")) {  
+    // checkbox is checked 
+} else {
+    // checkbox is not checked 
+}
+// form-check-input {{ answer.id }}
+$(".form-check-input").on("click", function (ev) {
+    fetch("/answer/correct/", {
+        method: 'POST',
+        headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: 'answer_id=' + $(this).data('id') + '&' + 'question_id=' + $(".question_to_answer").data('id'),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.status == 'ok') {
+            console.log(data.is_correct);
+        }
+        else {
+            console.log("error while setting like");
+        }
+    })
+});

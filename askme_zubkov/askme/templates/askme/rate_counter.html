@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-4 arrow-box">
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated and obj.author != request.user %}
             <button type="button" class="btn btn-primary arrow {{ obj_type }} like {{ obj.id }}" {% if obj.current_reaction == 1 %} disabled {% endif %} data-id="{{ obj.id }}">↑</button>
         {% else %}
             <button type="button" class="btn btn-primary arrow {{ obj_type }} like" disabled data-id="{{ obj.id }}">↑</button>
@@ -10,7 +10,7 @@
         <button type="button" class="btn btn-primary rate" id={{ obj.id }}>{{ obj.rate }}</button>
     </div>
     <div class="col-4 arrow-box">
-        {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated and obj.author != request.user %}
             <button type="button" class="btn btn-primary arrow {{ obj_type }} dislike {{ obj.id }}" {% if obj.current_reaction == -1 %} disabled {% endif %} data-id="{{ obj.id }}">↓</button>
         {% else %}
             <button type="button" class="btn btn-primary arrow {{ obj_type }} dislike" disabled data-id="{{ obj.id }}">↓</button>

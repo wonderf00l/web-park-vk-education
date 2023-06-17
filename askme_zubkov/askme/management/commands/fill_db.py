@@ -83,7 +83,7 @@ class Command(BaseCommand):
         for i in range(chunks_quantity):
 
             Answer.objects.bulk_create([
-                Answer(content=self.fake.text(), correctness_degree=randint(1, profiles_last), author_id=randint(1, profiles_last),
+                Answer(content=self.fake.text(), is_correct=randint(0, 1), author_id=randint(1, profiles_last),
                     question_id=randint(1, questions_last))
                 for j in range(chunk_size)
             ])
