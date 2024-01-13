@@ -28,7 +28,7 @@
             {% include "askme/answer_item.html" with answer=answer_ %}
         {% endfor %}
     </div>
-    {% if request.user != question.author %}
+    {% if request.user.is_authenticated == 1 and request.user != question.author %}
         <form action="{{ question.get_url }}" method='post'>
             {% csrf_token %}
             {% bootstrap_form answer_form %}

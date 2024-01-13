@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db.models import Count
-import datetime
+from datetime import datetime, timedelta
 from django.db.models import Sum
 
 
@@ -12,9 +12,13 @@ from django.db.models import Sum
 
 
 class ProfileManager(models.Manager):
-    # def get_reaction(self, obj, obj_id):
-    #     return self
-    pass
+    
+    def top_users(self, quantity=10):
+        users_with_recent_q_n_a=User.objects.filter(Q(question__publication_date__gte=datetime.now().date() - timedelta(days=90)) 
+                                                    & Q(answer__publication_date__gte=datetime.now().date() - timedelta(days=90))).distinct() # без distinct - делает inner_join on author.id = user.id(то есть каждому юзеру ставится в соответствие n-ое число его вопрсоов, но т.к. для n вопросов юзер дублируется n раз, то в сумме будет насчитано полей юзеров столько же, сколько и самих вопросов, т.к. изанчально делает join); далее group_by - при annotate
+        
+        return users_with_recent_q_n_a.annotate(top=(Count('question') + Count('answer'))).order_by('-top')[:quantity]
+        
 
 
 class QuestionManager(models.Manager):
@@ -27,7 +31,7 @@ class QuestionManager(models.Manager):
 
     # def hot(self, question_like_stat):
     #     return [self.get(id=dict['object_id']) for dict in question_like_stat]
-    
+
     def hot(self, quantity=500):
         return self.annotate(rate_=Sum('rating__reaction', default = 0)).order_by('-rate_')[:quantity] # обращаемся к related(вторичной) модели
 
@@ -46,8 +50,6 @@ class LikeManager(models.Manager):
 
 class TagManager(models.Manager):
 
-    def with_question(self):
-        pass
-
-    def questions(self):
-        pass
+    def top_tags(self, quantity=10):
+        tags_with_recent_questions = self.filter(questions__publication_date__gte=datetime.now().date() - timedelta(days=90)).distinct()
+        return tags_with_recent_questions.annotate(top=Count('questions')).order_by('-top')[:quantity]

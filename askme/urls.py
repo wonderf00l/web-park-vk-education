@@ -20,5 +20,6 @@ urlpatterns = [
     path('answer/correct/', check_answer, name='check_answer'),
 ]   
 
-if settings_.DEBUG: # раздача медиа в дебаг-режиме(уже будет доступна по урлу localhost/.../img.png)
-    urlpatterns += static(settings_.MEDIA_URL, document_root=settings_.MEDIA_ROOT)
+# if settings_.DEBUG: # раздача медиа в дебаг-режиме(уже будет доступна по урлу localhost/.../img.png)
+#     urlpatterns += static(settings_.MEDIA_URL, document_root=settings_.MEDIA_ROOT)
+#     urlpatterns += static(settings_.STATIC_URL, document_root=settings_.STATIC_ROOT)

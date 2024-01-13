@@ -1,4 +1,4 @@
-from .url_list import WHITELIST
+from django.core.cache import cache
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponsePermanentRedirect, Http404, HttpResponseBadRequest
 from django.contrib import auth
@@ -12,9 +12,15 @@ from .models import *
 from .forms import *
 
 def default_context(*args, **kwargs):
-    return {'pop_tags': kwargs['pop_tags'],
-            'best_members': kwargs['best_members']}
-
+    # pop_tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7']
+    # best_members = ['vasya', 'terminator', 'aligator', 'pupkin', 'puma']
+    # return {
+    #     'pop_tags': pop_tags,
+    #     'best_members': best_members 
+    # }
+    return {'pop_tags': cache.get('top_tags'),
+            'best_members': cache.get('top_users')}
+    
 def get_vote_by_user(model_inst, curr_user):
     try:
         return model_inst.rating.get(author=curr_user).reaction # -1 0 1
@@ -38,9 +44,7 @@ def questions_list(request, processor, url_infix):
     page = paginate(request, questions, per_page=20)
     paginator, active_page = page.paginator, page.number
     paginator.base_url=f'/questions/' + url_infix + '?page='
-    pop_tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7']
-    best_members = ["pupkin", "petrov", "terminator", "aligator"]
-    return dict(default_context(pop_tags=pop_tags, best_members=best_members), **{
+    return dict(default_context(), **{
         "user": request.user,
         "page":page,
         "paginator":paginator,
@@ -64,9 +68,7 @@ def tag_questions(request, tag_id):
     page = paginate(request, questions, per_page=20)
     paginator, active_page = page.paginator, page.number
     paginator.base_url='/questions/tag/' + str(tag_id)
-    pop_tags = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7']
-    best_members = ["pupkin", "petrov", "terminator", "aligator"]
-    return render(request, 'askme/tag_questions.html', context=dict(default_context(pop_tags=pop_tags, best_members=best_members), **{
+    return render(request, 'askme/tag_questions.html', context=dict(default_context(), **{
         "page":page,
         "paginator":paginator,
         "active_page":active_page,
@@ -93,28 +95,18 @@ def question_page(request, question_id):
     page = paginate(request, answers, per_page=30)
     paginator, active_page = page.paginator, page.number
     paginator.base_url = '/questions/' + str(question_id)
-    pop_tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
-    best_members = ["pupkin", "petrov", "terminator", "aligator"]
-    context = {
+    return render(request, 'askme/question.html', context=dict(default_context(), **{
         "page":page,
         "paginator":paginator,
         "active_page":active_page,
-        "pop_tags":
-        pop_tags,
-        "best_members":
-        best_members,
         "question":question,
         "answers": answers,
         "answer_form": answer_form
-    }
-    return render(request, 'askme/question.html', context=context)
+    }))
 
 @require_http_methods(['GET', 'POST'])
 @login_required(redirect_field_name='continue')
 def ask_question(request):
-
-    tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
-    best_members = ["pupkin", "petrov", "terminator", "aligator"]
 
     if request.method == 'POST':
         question_form = AddQuestionForm(request.POST, request.user)
@@ -123,13 +115,10 @@ def ask_question(request):
             return redirect(reverse('question_page', kwargs={'question_id':new_question.id}))
     elif request.method == 'GET':
         question_form = AddQuestionForm()
-    context = {
-        "pop_tags": tags,
-        "best_members": best_members,
-        "question_form":question_form,
-    }
 
-    return render(request, 'askme/ask.html', context=context)
+    return render(request, 'askme/ask.html', context=dict(default_context(), **{
+        "question_form":question_form,
+    }))
 
 @require_http_methods(['GET', 'POST'])
 def register(request):
@@ -144,15 +133,9 @@ def register(request):
     else:
         register_form = UserRegisterForm()
 
-    tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
-    best_members = ["pupkin", "petrov", "terminator", "aligator"]
-    context = {
-        "tags": tags,
-        "best_members": best_members,
+    return render(request, 'askme/register.html', context=dict(default_context(), **{
         "register_form": register_form
-    }
-
-    return render(request, 'askme/register.html', context=context)
+    }))
 
 @require_http_methods(['GET', 'POST'])
 def login(request): # check 'continue'
@@ -171,17 +154,11 @@ def login(request): # check 'continue'
         if login_form.is_valid(): # authenticate() inside clean() which is triggered by is_valid() (or form.errors)
             auth.login(request, login_form.get_user()) # session creation inside this method
             login.continue_url = ''
-            return redirect(redirect_path)        
-
-    tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
-    best_members = ["pupkin", "petrov", "terminator", "aligator"]
-    context = {
-        "pop_tags": tags,
-        "best_members": best_members,
+            return redirect(redirect_path)
+        
+    return render(request, 'askme/login.html', context=dict(default_context(), **{
         "login_form": login_form
-    }
-
-    return render(request, 'askme/login.html', context=context)
+    }))
 
 @require_http_methods(['GET', 'POST'])
 @login_required(redirect_field_name='continue') # .../&continue=урл страницы, куда login_required
@@ -202,15 +179,9 @@ def settings(request):
     elif request.method == 'GET':
         settings_form = UserSettingsForm(initial=model_to_dict(request.user))
 
-    tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7"]
-    best_members = ["pupkin", "petrov", "terminator", "aligator"]
-    context = {
-        "settings_form": settings_form,
-        "pop_tags": tags,
-        "best_members": best_members
-    }
-
-    return render(request, 'askme/settings.html', context=context)
+    return render(request, 'askme/settings.html', context=dict(default_context(), **{
+        "settings_form": settings_form
+    }))
 
 def paginate(request, objects, per_page=20):
     try:

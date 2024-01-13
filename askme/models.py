@@ -3,9 +3,10 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from .managers import QuestionManager, LikeManager
+from .managers import *
 from django.db.models import Sum
 # from django.db.models.signals import post_init
+
 
 class Question(models.Model):
 
@@ -97,6 +98,9 @@ class Answer(models.Model):
 
 
 class Tag(models.Model):
+
+    objects = TagManager()
+
     name = models.CharField(max_length=255, unique=True, blank=False, null=False)
     questions = models.ManyToManyField(Question)
 
@@ -111,6 +115,8 @@ class Tag(models.Model):
 
 
 class Profile(models.Model):
+
+    objects = ProfileManager()
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to="avatars/%Y/%m/%d/", blank=True, null=True, default='default_avatar.png') # default относительно media/ folder(MEDIA_URL)

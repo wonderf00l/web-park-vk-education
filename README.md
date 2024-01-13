@@ -1,4 +1,10 @@
-# web-park-vk-education
+# Askme - simplified аналог Stack Overflow
 
-Контакты
-telegram: @w0nderf00l
+SSR-приложение **"Вопрос-ответ"**
+
+# Технологический стек
+- *Python*
+- *Django*
+- *PostgreSQL*
+- *JavaScript*
+- *bootstrap4*
